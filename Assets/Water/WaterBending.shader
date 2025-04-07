@@ -7,6 +7,7 @@ Shader "Unlit/WaterBending"
         _DistortionStrength ("Distortion Strength", Float) = 0.05
         _WaveHeight ("Wave Height", Float) = 0.1
         _WaveFrequency ("Wave Frequency", Float) = 5.0
+        _Alpha ("Alpha", Range(0, 1)) = 0.4
     }
     SubShader
     {
@@ -41,6 +42,7 @@ Shader "Unlit/WaterBending"
             float _DistortionStrength;
             float _WaveHeight;
             float _WaveFrequency;
+            float _Alpha;
 
             v2f vert (appdata v)
             {
@@ -64,7 +66,7 @@ Shader "Unlit/WaterBending"
                 distortedUV.x += cos(i.uv.y * 20.0 + time) * _DistortionStrength;
 
                 fixed4 col = tex2D(_MainTex, distortedUV);
-                col.a = 0.3; 
+                col.a = 0.4; 
 
                 return col;
             }

@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -27,9 +27,17 @@ Material:
         m_Texture: {fileID: 2800000, guid: e33e04d6bbcd1c2468db5522eb8531f4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RainbowTex:
+        m_Texture: {fileID: 2800000, guid: 8a453f8a807c5ab4bbb5682ea9e926b5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 0.4
     - _DistortionStrength: 0.05
+    - _EdgeFade: 1
+    - _FoamStrength: 0.15
+    - _FresnelPower: 2
     - _Speed: 3
     - _WaveFrequency: 5
     - _WaveHeight: 0.1
