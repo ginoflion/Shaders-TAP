@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Waves
+  m_Shader: {fileID: 4800000, guid: 5f1532b764761a54fad018527416fa5a, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FoilTex:
+        m_Texture: {fileID: 2800000, guid: 830c2db171bee1c4aa54cc92f19ddf87, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 830c2db171bee1c4aa54cc92f19ddf87, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 83d7ef5a32723a741a071eef68632ac0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Alpha: 0.979
+    - _Distortion: 0.08
+    - _DistortionStrength: 1.11
+    - _FoamSmoothness: 0.01
+    - _FoamThreshold: 0.1
+    - _NoiseStrength: 1
+    - _Speed: 1
+    - _WaveAmplitude: 38.77
+    - _WaveFrequency: 15.28
+    - _WaveHeight: 0.05
+    - _WaveSpeed: 8.43
+    m_Colors: []
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
