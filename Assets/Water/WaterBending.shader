@@ -66,7 +66,7 @@ Shader "Unlit/WaterBending"
                 distortedUV.x += cos(i.uv.y * 20.0 + time) * _DistortionStrength;
 
                 fixed4 col = tex2D(_MainTex, distortedUV);
-                col.a = 0.4; 
+                col.a = _Alpha; 
 
                 return col;
             }
