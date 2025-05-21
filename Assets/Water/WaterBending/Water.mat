@@ -19,12 +19,16 @@ Material:
   m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _FresnelColor
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e33e04d6bbcd1c2468db5522eb8531f4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9e91cd5bde426714d9f0ef165f143d7c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: c24c005cb31b0514a85361709b63fa93, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RainbowTex:
@@ -33,14 +37,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.4
-    - _DistortionStrength: 0.05
+    - _Alpha: 0.171
+    - _DistortionStrength: 1.56
     - _EdgeFade: 1
     - _FoamStrength: 0.15
-    - _FresnelPower: 2
-    - _Speed: 4
+    - _FresnelPower: -1.62
+    - _Speed: 8.94
     - _WaveFrequency: 5.16
     - _WaveHeight: 0.1
-    m_Colors: []
+    m_Colors:
+    - _ColorTint: {r: 0.5, g: 0.8, b: 1, a: 1}
+    - _FresnelColor: {r: 0, g: 0.35267815, b: 0.8980392, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
