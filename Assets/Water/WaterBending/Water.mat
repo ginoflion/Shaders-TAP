@@ -50,7 +50,7 @@ Material:
     - _Foam: 0.227
     - _FoamStrength: 0.15
     - _FresnelPower: 0
-    - _GlowIntensity: 1.52
+    - _GlowIntensity: 1.62
     - _RefractionStrength: 1.471
     - _SecondaryWaveFreq: 1.5
     - _SecondaryWaveHeight: 0.1
@@ -65,5 +65,6 @@ Material:
     - _DeepWaterColor: {r: 0.4575472, g: 0.6736807, b: 1, a: 1}
     - _FoamColor: {r: 1, g: 0, b: 0.061194897, a: 1}
     - _FresnelColor: {r: 0.367791, g: 0.43458152, b: 0.5377358, a: 1}
-    - _WaterColor: {r: 0.10426309, g: 0.60787845, b: 0.6698113, a: 1}
+    - _SecondaryColor: {r: 0.057271272, g: 0.114133656, b: 0.3679245, a: 1}
+    - _WaterColor: {r: 0.071110725, g: 0.6861088, b: 0.8867924, a: 1}
   m_BuildTextureStacks: []
