@@ -24,11 +24,15 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9e91cd5bde426714d9f0ef165f143d7c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7c65466f14e63434c99e8d740b1f7cc9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
         m_Texture: {fileID: 2800000, guid: c24c005cb31b0514a85361709b63fa93, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 9e91cd5bde426714d9f0ef165f143d7c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RainbowTex:
@@ -37,16 +41,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.171
-    - _DistortionStrength: 1.56
+    - _Alpha: 0.462
+    - _Depth: 1
+    - _DistortionStrength: 1
     - _EdgeFade: 1
+    - _FlowSpeed2: 1
+    - _Foam: 0.227
     - _FoamStrength: 0.15
-    - _FresnelPower: -1.62
-    - _Speed: 8.94
-    - _WaveFrequency: 5.16
-    - _WaveHeight: 0.1
+    - _FresnelPower: 0
+    - _RefractionStrength: 1.471
+    - _SecondaryWaveFreq: 1.5
+    - _SecondaryWaveHeight: 0.1
+    - _Sparkle: 0.462
+    - _SparkleSize: 0
+    - _Speed: 1
+    - _WaveFrequency: 1
+    - _WaveHeight: 0.2
+    - _WaveSpeed: 1
     m_Colors:
-    - _ColorTint: {r: 0.5, g: 0.8, b: 1, a: 1}
-    - _FresnelColor: {r: 0, g: 0.35267815, b: 0.8980392, a: 1}
+    - _ColorTint: {r: 0.118948035, g: 0.7656824, b: 0.9339623, a: 1}
+    - _DeepWaterColor: {r: 0.4575472, g: 0.6736807, b: 1, a: 1}
+    - _FoamColor: {r: 1, g: 0, b: 0.061194897, a: 1}
+    - _FresnelColor: {r: 0.367791, g: 0.43458152, b: 0.5377358, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1

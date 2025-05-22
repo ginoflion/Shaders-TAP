@@ -3,6 +3,8 @@ Shader "Unlit/Paint"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _DirtTex ("Dirt Texture", 2D) = "black" {}
+        _Noise ("Dirt Noise", 2D) = "black" {}
     }
     SubShader
     {
@@ -37,6 +39,8 @@ Shader "Unlit/Paint"
                 return squaredDistance <= radius * radius;
             }
 
+            sampler2D _Noise;
+            sampler2D _DirtTex;
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
@@ -52,14 +56,19 @@ Shader "Unlit/Paint"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 dirt = tex2D(_DirtTex, i.uv);
+                fixed4 noise = tex2D(_Noise, i.uv);
+                fixed4 clean = tex2D(_MainTex, i.uv);
 
                 pontoCSharp=mul(unity_WorldToObject, pontoCSharp);
                 if(isPointInSphere(i.pos0, pontoCSharp.xyz, 1)){
-                    return float4(1, 0, 0, 1);
+                    float mix = noise.r + noise.g + noise.b;
+                    fixed4 color = lerp(clean, dirt, mix);
+                    return color;
                 }
+                
     
-                return col;
+                return dirt;
             }
             ENDCG
         }
