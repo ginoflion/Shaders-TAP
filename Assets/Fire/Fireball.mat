@@ -85,8 +85,8 @@ Material:
     - _DstBlend: 0
     - _EmissionHeight: 5
     - _EmissionIntensity: 2
-    - _EmissionNoiseInfluence: 0.241
-    - _EmissionStrength: 4.46
+    - _EmissionNoiseInfluence: 1
+    - _EmissionStrength: 0.23
     - _FireHeight: 2.55
     - _FireIntensity: 2.03
     - _FireScale: 3
@@ -118,7 +118,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _MovementSpeed: 0.522
-    - _NoiseDistortion: 0.093
+    - _NoiseDistortion: 0.2
     - _NoiseFrequency: 5.29
     - _NoiseScale: 9.21
     - _NoiseTexScale: 2
@@ -142,13 +142,13 @@ Material:
     - _CoolColor: {r: 0.8, g: 0.19999996, b: 0, a: 1}
     - _CrackColor: {r: 1, g: 0.5, b: 0.09999997, a: 1}
     - _Direction: {r: 0, g: 1, b: 0, a: 0}
-    - _EmissionColor: {r: 0.12855999, g: 0.23083077, b: 0.254717, a: 1}
+    - _EmissionColor: {r: 0.5188679, g: 0.26188144, b: 0.28244033, a: 1}
     - _FireColor: {r: 1, g: 0.7, b: 0.09999997, a: 1}
     - _FireColor1: {r: 0.7075472, g: 0, b: 0.01511855, a: 1}
     - _FireColor2: {r: 0.9433962, g: 0.65241593, b: 0.048949808, a: 1}
     - _FireColor3: {r: 1, g: 0, b: 0.040957928, a: 1}
     - _FlameColor: {r: 0.8584906, g: 0.04337291, b: 0.028346404, a: 0.8}
-    - _FresnelColor: {r: 0.3962264, g: 0.108874805, b: 0.072890714, a: 1}
+    - _FresnelColor: {r: 0.7169812, g: 0.42585024, b: 0.030437866, a: 1}
     - _HotColor: {r: 1, g: 0.8, b: 0.19999996, a: 1}
     - _MagmaColor1: {r: 1, g: 0.39999998, b: 0, a: 1}
     - _MagmaColor2: {r: 0.4528302, g: 0.0386786, b: 0, a: 1}
