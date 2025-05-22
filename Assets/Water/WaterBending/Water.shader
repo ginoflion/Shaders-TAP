@@ -1,26 +1,20 @@
-Shader "Unlit/Water"
+Shader "Unlit/KataraWaterBending_Bioluminescent"
 {
     Properties
     {
-        _MainTex("Texture", 2D) = "white" {}
-        _NoiseTex("Noise", 2D) = "white" {} // for UV distortion
-        _Speed("Flow Speed", Float) = 1.0
-        _DistortionStrength("Distortion Strength", Float) = 0.05
-        _WaveHeight("Wave Height", Float) = 0.1
-        _WaveFrequency("Wave Frequency", Float) = 5.0
-        _Alpha("Alpha", Range(0,1)) = 0.4
-        _FresnelColor("Fresnel Color", Color) = (0.3, 0.6, 1.0, 1)
-        _FresnelPower("Fresnel Power", Float) = 5.0
-        _ColorTint("Tint Color", Color) = (0.5, 0.8, 1.0, 1)
+        _MainTex("Water Texture", 2D) = "white" {}
+        _FlowSpeed("Flow Speed", Float) = 2.0
+        _WaveHeight("Wave Height", Float) = 0.3
+        _Alpha("Transparency", Range(0,1)) = 0.7
+        _WaterColor("Water Color", Color) = (0.2, 0.5, 1.0, 1)
+        _GlowIntensity("Glow Intensity", Range(0, 5)) = 2.0
     }
 
     SubShader
     {
-        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
-        LOD 200
-        Cull Off
+        Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
         ZWrite Off
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha
 
         Pass
         {
@@ -30,21 +24,15 @@ Shader "Unlit/Water"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
-            sampler2D _NoiseTex;
-            float4 _MainTex_ST;
-            float _Speed;
-            float _DistortionStrength;
+            float _FlowSpeed;
             float _WaveHeight;
-            float _WaveFrequency;
             float _Alpha;
-            float4 _FresnelColor;
-            float _FresnelPower;
-            float4 _ColorTint;
+            float4 _WaterColor;
+            float _GlowIntensity;
 
             struct appdata
             {
                 float4 vertex : POSITION;
-                float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
@@ -52,51 +40,53 @@ Shader "Unlit/Water"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                float3 worldNormal : TEXCOORD1;
-                float3 worldViewDir : TEXCOORD2;
+                float2 waveUV : TEXCOORD1;
             };
 
-            v2f vert (appdata v)
+            v2f vert(appdata v)
             {
                 v2f o;
-                float time = _Time.y * _Speed;
-
+                float t = _Time.y * _FlowSpeed;
                 float3 pos = v.vertex.xyz;
-                pos.y += sin((pos.x + pos.z) * _WaveFrequency + time) * _WaveHeight;
 
-                o.vertex = UnityObjectToClipPos(float4(pos, 1.0));
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                float wave = sin(pos.x * 4.0 + t) * _WaveHeight +
+                             cos(pos.z * 3.0 + t * 1.5) * _WaveHeight * 0.7 +
+                             sin(length(pos.xz) * 6.0 - t * 2.0) * _WaveHeight * 0.5;
 
-                float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                o.worldViewDir = normalize(_WorldSpaceCameraPos - worldPos);
+                pos.y += wave;
+                pos.x += sin(t + pos.y * 8.0) * 0.05;
+                pos.z += cos(t * 1.2 + pos.y * 6.0) * 0.05;
+
+                o.vertex = UnityObjectToClipPos(pos);
+                o.uv = v.uv;
+                o.waveUV = pos.xz;
 
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
-                float time = _Time.y * _Speed;
+                float t = _Time.y * _FlowSpeed;
 
-                // UV distortion using noise texture
-                float2 noiseUV = i.uv * 3.0 + time;
-                float2 noise = tex2D(_NoiseTex, noiseUV).rg;
-                float2 distortedUV = i.uv + (noise - 0.5) * _DistortionStrength;
+                float2 flow1 = i.uv + float2(sin(t * 1.2) * 0.15, t * 0.3);
+                float2 flow2 = i.uv + float2(cos(t * 0.8) * 0.1, -t * 0.2);
 
-                fixed4 col = tex2D(_MainTex, distortedUV);
-                col.rgb *= _ColorTint.rgb;
+                fixed4 waterTex = (tex2D(_MainTex, flow1) + tex2D(_MainTex, flow2)) * 0.5;
 
-                // Fresnel effect
-                float fresnel = pow(1.0 - saturate(dot(i.worldNormal, i.worldViewDir)), _FresnelPower);
-                float3 fresnelColor = _FresnelColor.rgb * fresnel;
+                fixed4 col = _WaterColor * waterTex;
 
-                col.rgb += fresnelColor;
-                col.a = _Alpha * col.a;
+                float pulse = sin(t * 3.0 + i.waveUV.x + i.waveUV.y) * 0.5 + 0.5;
+                float streaks = (sin(i.uv.y * 30.0 - t * 5.0) * 0.5 + 0.5) *
+                                (cos(i.uv.x * 25.0 + t * 4.0) * 0.5 + 0.5) * 0.5;
+
+                float glow = (pulse + streaks) * _GlowIntensity;
+
+                col.rgb *= glow;
+                col.a = _Alpha;
 
                 return col;
             }
             ENDCG
         }
     }
-    FallBack "Unlit/Transparent"
 }
