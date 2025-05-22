@@ -14,8 +14,6 @@ Shader "Unlit/Paint"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
@@ -28,9 +26,16 @@ Shader "Unlit/Paint"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
+                float4 pos0 : TEXCOORD1;
                 float4 vertex : SV_POSITION;
             };
+
+            bool isPointInSphere(float3 ponto, float3 center, float radius)
+            {
+                float squaredDistance = dot(ponto - center, ponto - center);
+                
+                return squaredDistance <= radius * radius;
+            }
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -38,18 +43,22 @@ Shader "Unlit/Paint"
             v2f vert (appdata v)
             {
                 v2f o;
+                o.pos0 = v.vertex;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
+            float4 pontoCSharp = float4(0, 0, 0, 1);
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+
+                pontoCSharp=mul(unity_WorldToObject, pontoCSharp);
+                if(isPointInSphere(i.pos0, pontoCSharp.xyz, 1)){
+                    return float4(1, 0, 0, 1);
+                }
+    
                 return col;
             }
             ENDCG
