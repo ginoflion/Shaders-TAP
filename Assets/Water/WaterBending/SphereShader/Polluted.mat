@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Polluted
+  m_Shader: {fileID: 4800000, guid: 9e7913cad2450e14ba9f0b9f537872cd, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 33ba5140ff8350742a9be1b79eeefd82, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PollutionTex:
+        m_Texture: {fileID: 2800000, guid: 721615093d4257a43921b79c83fc5d09, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Alpha: 0.764
+    - _Distortion: 0.606
+    - _FadeSpeed: 4.73
+    - _FlowSpeed: 0.5
+    - _Murkiness: 0.7
+    - _OilAmount: 0.4
+    - _ScumAmount: 0.3
+    - _Speed: 1.77
+    - _WaveFreq: 1.55
+    - _WaveHeight: 0.02
+    - _WaveStrength: 0.136
+    m_Colors:
+    - _DirtyColor: {r: 0.5754717, g: 0.4751442, b: 0.36645603, a: 1}
+    - _MainColor: {r: 0, g: 0.03742377, b: 0.6226415, a: 1}
+    - _OilColor: {r: 0.6981132, g: 0.3359582, b: 0.062566735, a: 1}
+    - _PollutionColor: {r: 1, g: 0, b: 0.3636365, a: 1}
+    - _ScumColor: {r: 0.24096648, g: 0.3584906, b: 0.12344251, a: 1}
+  m_BuildTextureStacks: []

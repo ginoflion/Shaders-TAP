@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 816bb518824091e478e4510e0c8a077e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9e91cd5bde426714d9f0ef165f143d7c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.414
+    - _Alpha: 0
     - _Depth: 1
     - _DistortionStrength: 1
     - _EdgeFade: 1
@@ -50,7 +50,7 @@ Material:
     - _Foam: 0.227
     - _FoamStrength: 0.15
     - _FresnelPower: 4.53
-    - _GlowIntensity: 1.62
+    - _GlowIntensity: 1.99
     - _RefractionStrength: 1.471
     - _SecondaryWaveFreq: 1.5
     - _SecondaryWaveHeight: 0.1

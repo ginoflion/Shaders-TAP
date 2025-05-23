@@ -92,11 +92,9 @@ Shader "Unlit/KataraWaterBending_Bioluminescent_Fresnel"
 
                 float glow = (pulse + streaks) * _GlowIntensity;
 
-                // Color blending
                 fixed4 blendedColor = lerp(_WaterColor, _SecondaryColor, pulse);
                 fixed4 col = blendedColor * waterTex;
 
-                // Fresnel effect
                 float3 N = normalize(i.worldNormal);
                 float3 V = normalize(i.viewDir);
                 float fresnel = pow(1.0 - saturate(dot(N, V)), _FresnelPower);

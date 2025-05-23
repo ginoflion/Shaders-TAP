@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LSDPostProcessing
-  m_Shader: {fileID: 4800000, guid: 686f658689d4bbf4fa946acf1d01706d, type: 3}
+  m_Name: Underwater
+  m_Shader: {fileID: 4800000, guid: 02a6a369406a4674f875591e137fc6d9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ChromaticAmount: 0
-    - _DistortionStrength: 0.0088
-    - _GlowIntensity: 0.055
-    - _PulseSpeed: 6.29
+    - _WaveAmount: 0.00501
     m_Colors:
-    - _GlowColor: {r: 0.16232742, g: 0, b: 0.3773585, a: 1}
+    - _WaterColor: {r: 0.5801887, g: 0.7900944, b: 1, a: 0.03529412}
   m_BuildTextureStacks: []
