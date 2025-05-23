@@ -1,13 +1,16 @@
-Shader "Unlit/KataraWaterBending_Bioluminescent"
+Shader "Unlit/KataraWaterBending_Bioluminescent_Fresnel"
 {
-    Properties
+        Properties
     {
         _MainTex("Water Texture", 2D) = "white" {}
         _FlowSpeed("Flow Speed", Float) = 2.0
         _WaveHeight("Wave Height", Float) = 0.3
         _Alpha("Transparency", Range(0,1)) = 0.7
-        _WaterColor("Water Color", Color) = (0.2, 0.5, 1.0, 1)
+        _WaterColor("Primary Water Color", Color) = (0.2, 0.5, 1.0, 1)
+        _SecondaryColor("Secondary Glow Color", Color) = (0.0, 1.0, 0.8, 1)
         _GlowIntensity("Glow Intensity", Range(0, 5)) = 2.0
+        _FresnelPower("Fresnel Power", Range(0.5, 10.0)) = 3.0
+        _FresnelColor("Fresnel Glow Color", Color) = (0.0, 1.0, 1.0, 1.0)
     }
 
     SubShader
@@ -28,12 +31,16 @@ Shader "Unlit/KataraWaterBending_Bioluminescent"
             float _WaveHeight;
             float _Alpha;
             float4 _WaterColor;
+            float4 _SecondaryColor;
             float _GlowIntensity;
+            float _FresnelPower;
+            float4 _FresnelColor;
 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float3 normal : NORMAL;
             };
 
             struct v2f
@@ -41,6 +48,8 @@ Shader "Unlit/KataraWaterBending_Bioluminescent"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float2 waveUV : TEXCOORD1;
+                float3 worldNormal : TEXCOORD2;
+                float3 viewDir : TEXCOORD3;
             };
 
             v2f vert(appdata v)
@@ -61,6 +70,10 @@ Shader "Unlit/KataraWaterBending_Bioluminescent"
                 o.uv = v.uv;
                 o.waveUV = pos.xz;
 
+                float3 worldPos = mul(unity_ObjectToWorld, float4(pos, 1.0)).xyz;
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.viewDir = _WorldSpaceCameraPos - worldPos;
+
                 return o;
             }
 
@@ -73,14 +86,19 @@ Shader "Unlit/KataraWaterBending_Bioluminescent"
 
                 fixed4 waterTex = (tex2D(_MainTex, flow1) + tex2D(_MainTex, flow2)) * 0.5;
 
-                fixed4 col = _WaterColor * waterTex;
-
                 float pulse = sin(t * 3.0 + i.waveUV.x + i.waveUV.y) * 0.5 + 0.5;
                 float streaks = (sin(i.uv.y * 30.0 - t * 5.0) * 0.5 + 0.5) *
                                 (cos(i.uv.x * 25.0 + t * 4.0) * 0.5 + 0.5) * 0.5;
 
                 float glow = (pulse + streaks) * _GlowIntensity;
 
+                fixed4 blendedColor = lerp(_WaterColor, _SecondaryColor, pulse);
+                fixed4 col = blendedColor * waterTex;
+
+                float3 N = normalize(i.worldNormal);
+                float3 V = normalize(i.viewDir);
+                float fresnel = pow(1.0 - saturate(dot(N, V)), _FresnelPower);
+                col.rgb += fresnel * _FresnelColor.rgb * _GlowIntensity;
                 col.rgb *= glow;
                 col.a = _Alpha;
 
