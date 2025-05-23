@@ -1,4 +1,4 @@
-Shader "Hidden/SimpleUnderwater"
+Shader "Hidden/Underwater"
 {
     Properties
     {
@@ -38,16 +38,13 @@ Shader "Hidden/SimpleUnderwater"
             
             fixed4 frag(v2f i) : SV_Target
             {
-                // Simple wave distortion
                 float2 wave = float2(
                     sin(i.uv.y * 15.0 + _Time.y * 2.0),
                     cos(i.uv.x * 12.0 + _Time.y * 1.5)
                 ) * _WaveAmount;
                 
-                // Sample with wave offset
                 fixed4 col = tex2D(_MainTex, i.uv + wave);
                 
-                // Apply water tint
                 col.rgb *= _WaterColor.rgb;
                 
                 return col;

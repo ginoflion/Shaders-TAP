@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 33ba5140ff8350742a9be1b79eeefd82, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5e90675ce6497f94887d0961f79661eb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PollutionTex:
@@ -38,13 +38,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 0.764
-    - _Distortion: 0.606
+    - _Distortion: 0.39
     - _FadeSpeed: 4.73
     - _FlowSpeed: 0.5
     - _Murkiness: 0.7
     - _OilAmount: 0.4
     - _ScumAmount: 0.3
-    - _Speed: 1.77
+    - _Speed: 1.68
     - _WaveFreq: 1.55
     - _WaveHeight: 0.02
     - _WaveStrength: 0.136
