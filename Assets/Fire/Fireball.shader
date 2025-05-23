@@ -1,181 +1,131 @@
-Shader "Custom/MagmaFireballEmittingFlames"
+Shader "Custom/SolidMagmaBall_SurfaceFlames"
 {
     Properties
     {
-        // Magma Core
-        _Color("Core Color", Color) = (1, 0.5, 0, 1)
-        _MainTex("Magma Texture (RGB)", 2D) = "white" {}
-        _NoiseTex("Flow Noise Texture (Grayscale)", 2D) = "gray" {}
-        _ScrollSpeedMainX ("Magma Scroll Speed X", Float) = 0.05
-        _ScrollSpeedMainY ("Magma Scroll Speed Y", Float) = 0.03
-        _MagmaTexScale ("Magma Texture Scale", Float) = 1.0
-        _ScrollSpeedNoiseX ("Flow Noise Scroll X", Float) = 0.1
-        _ScrollSpeedNoiseY ("Flow Noise Scroll Y", Float) = -0.08
+        _Color("Core Color", Color) = (1, 0.4, 0, 1)         // Laranja/Vermelho base
+        _MainTex("Magma Texture (RGB)", 2D) = "white" {}     // Textura de fissuras/rocha (opcional)
+        _NoiseTex("Flow Noise (Grayscale)", 2D) = "gray" {}  // Para distorção e fluxo do magma
+
+        _MagmaTexScale ("Magma Texture Scale", Float) = 1.5
+        _ScrollSpeedMainX ("Magma Scroll X", Float) = 0.03
+        _ScrollSpeedMainY ("Magma Scroll Y", Float) = 0.02
+        
         _NoiseTexScale ("Flow Noise Scale", Float) = 2.0
-        _NoiseDistortion ("Flow Noise Distortion for Magma", Range(0, 0.2)) = 0.05
-        _EmissionColor("Core Emission Color", Color) = (1, 0.2, 0, 1)
-        _EmissionStrength("Core Emission Strength", Range(0, 10)) = 2.0
-        _EmissionNoiseInfluence("Core Emission Noise Influence", Range(0, 1)) = 0.5
+        _ScrollSpeedNoiseX ("Flow Noise Scroll X", Float) = 0.07
+        _ScrollSpeedNoiseY ("Flow Noise Scroll Y", Float) = -0.05
+        _NoiseDistortion ("Flow Noise Distortion for Magma UVs", Range(0, 0.2)) = 0.08
 
-        // Fresnel
-        _FresnelColor("Fresnel Glow Color", Color) = (1, 0.8, 0.2, 1)
-        _FresnelPower("Fresnel Power", Range(0.1, 10)) = 3.0
+        _EmissionColor("Emission Color", Color) = (1, 0.2, 0, 1) // Cor da emissão principal
+        _EmissionStrength("Emission Strength", Range(0, 15)) = 3.0
+        _EmissionNoiseInfluence("Emission Noise Influence", Range(0, 1)) = 0.6 // Ruído afeta brilho da emissão
 
-        // Emitting Flames
-        _FlameAppearanceTex("Flame Appearance Noise (Grayscale)", 2D) = "gray" {} // Noise for flame visual shape
-        _FlameColor("Flame Color", Color) = (1, 0.7, 0.1, 0.8) // RGBA, A for flame opacity
-        _FlameIntensity("Flame Emission Intensity", Range(0, 10)) = 3.0
-        _FlameScrollSpeedY("Flame Visual Scroll Y", Float) = 0.8
-        _FlameScale("Flame Visual Scale", Float) = 2.5
-        _FlameThreshold("Flame Visual Threshold", Range(0, 1)) = 0.55
-        _FlameSmoothness("Flame Visual Edge Smoothness", Range(0.01, 0.5)) = 0.15
+        _FresnelColor("Fresnel Glow Color", Color) = (1, 0.7, 0.1, 1)
+        _FresnelPower("Fresnel Power", Range(0.1, 10)) = 4.0
 
-        // Vertex Displacement for Flames
-        _FlameDisplacementMap("Flame Displacement Noise (Grayscale)", 2D) = "gray" {} // Noise for pushing vertices
-        _FlameMaxHeight("Max Flame Height (Displacement)", Float) = 0.3
-        _FlameDisplacementScale("Flame Disp. Noise Scale", Float) = 2.0
-        _FlameDisplacementScrollY("Flame Disp. Noise Scroll Y", Float) = 0.4
-        _FlameDispThreshold("Flame Disp. Threshold", Range(0,1)) = 0.5
-        _FlameDispSmoothness("Flame Disp. Smoothness", Range(0.01, 0.5)) = 0.1
+        // Propriedades para "Chamas na Superfície"
+        _SurfaceFlameTex("Surface Flame Noise (Grayscale)", 2D) = "gray" {} // Ruído para as chamas na superfície
+        _SurfaceFlameColor("Surface Flame Color", Color) = (1, 0.6, 0.0, 1) // Cor das chamas superficiais
+        _SurfaceFlameIntensity("Surface Flame Intensity", Range(0, 10)) = 2.5
+        _SurfaceFlameScrollSpeedY("Surface Flame Scroll Y", Float) = 0.3
+        _SurfaceFlameScale("Surface Flame Texture Scale", Float) = 3.5
+        _SurfaceFlameThreshold("Surface Flame Noise Threshold", Range(0, 1)) = 0.65 // Define o corte para as chamas
+        _SurfaceFlameSmoothness("Surface Flame Edge Smoothness", Range(0.01, 0.5)) = 0.1 // Suavidade das bordas
     }
 
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" "IgnoreProjector"="True" }
-        LOD 300 // Might need to adjust
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
+        LOD 200
 
         CGPROGRAM
-        #pragma surface surf Standard vertex:vert alpha:blend fullforwardshadows
-        #pragma target 3.5 // For tex2Dlod in vertex shader
+        #pragma surface surf Standard fullforwardshadows
+        #pragma target 3.0
 
         sampler2D _MainTex;
         sampler2D _NoiseTex;
-        sampler2D _FlameAppearanceTex;
-        sampler2D _FlameDisplacementMap;
+        sampler2D _SurfaceFlameTex;
 
         struct Input
         {
             float2 uv_MainTex;
+            // As outras texturas usarão uv_MainTex como base para tiling/offset
             float3 worldNormal;
-            INTERNAL_DATA // Required for Fresnel when normals are modified by vert
             float3 viewDir;
-            // Data from vertex shader
-            half flamePresence; // 0 for magma, 1 for full flame (interpolated)
         };
 
-        // Magma Core Properties
+        // Propriedades
         half4 _Color;
-        float _ScrollSpeedMainX, _ScrollSpeedMainY, _MagmaTexScale;
-        float _ScrollSpeedNoiseX, _ScrollSpeedNoiseY, _NoiseTexScale;
+        float _MagmaTexScale, _ScrollSpeedMainX, _ScrollSpeedMainY;
+        float _NoiseTexScale, _ScrollSpeedNoiseX, _ScrollSpeedNoiseY;
         half _NoiseDistortion;
+        
         half4 _EmissionColor;
         half _EmissionStrength, _EmissionNoiseInfluence;
 
-        // Fresnel
         half4 _FresnelColor;
         half _FresnelPower;
 
-        // Emitting Flames Visuals
-        half4 _FireColor; // Renamed from _FlameColor in Properties to avoid conflict
-        half _FireIntensity; // Renamed
-        half _FireScrollSpeedY; // Renamed
-        half _FireScale; // Renamed
-        half _FireThreshold; // Renamed
-        half _FireSmoothness; // Renamed
-
-        // Flame Displacement
-        float _FlameMaxHeight;
-        float _FlameDisplacementScale;
-        float _FlameDisplacementScrollY;
-        float _FlameDispThreshold;
-        float _FlameDispSmoothness;
-
-
-        void vert (inout appdata_full v, out Input o)
-        {
-            UNITY_INITIALIZE_OUTPUT(Input, o);
-
-            // Calculate UVs for displacement noise
-            float2 dispUV = v.texcoord.xy * _FlameDisplacementScale;
-            dispUV.y += _Time.y * _FlameDisplacementScrollY; // Animate displacement noise
-
-            // Sample displacement noise (tex2Dlod needed for vertex texture fetch)
-            half displacementNoiseVal = tex2Dlod(_FlameDisplacementMap, float4(dispUV, 0, 0)).r;
-
-            // Determine flame presence for displacement and to pass to surface shader
-            // This value (0-1) determines if/how much this vertex becomes part of a flame
-            half flameDisplacementFactor = smoothstep(
-                _FlameDispThreshold,
-                _FlameDispThreshold + _FlameDispSmoothness,
-                displacementNoiseVal
-            );
-
-            // Displace vertex along its normal if it's a flame part
-            v.vertex.xyz += v.normal * flameDisplacementFactor * _FlameMaxHeight;
-
-            // Pass the flame presence factor to the surface shader
-            o.flamePresence = flameDisplacementFactor;
-            
-            // After modifying v.vertex, Unity's surface shader magic will recompute normals, etc.
-            // for the Input struct before calling surf.
-        }
+        half4 _SurfaceFlameColor;
+        half _SurfaceFlameIntensity, _SurfaceFlameScrollSpeedY, _SurfaceFlameScale;
+        half _SurfaceFlameThreshold, _SurfaceFlameSmoothness;
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            // --- Magma Core Base (Always present, fades under flames) ---
-            float2 flowNoiseUV = IN.uv_MainTex * _NoiseTexScale;
-            flowNoiseUV.x += _Time.y * _ScrollSpeedNoiseX;
-            flowNoiseUV.y += _Time.y * _ScrollSpeedNoiseY;
-            half flowNoiseVal = tex2D(_NoiseTex, flowNoiseUV).r;
+            // --- 1. Núcleo de Magma ---
+            // Scroll do ruído de fluxo
+            float2 scrolledNoiseUV = IN.uv_MainTex * _NoiseTexScale;
+            scrolledNoiseUV.x += _Time.y * _ScrollSpeedNoiseX;
+            scrolledNoiseUV.y += _Time.y * _ScrollSpeedNoiseY;
+            half noiseVal = tex2D(_NoiseTex, scrolledNoiseUV).r;
 
-            float2 magmaUV = IN.uv_MainTex * _MagmaTexScale;
-            magmaUV.x += (flowNoiseVal - 0.5) * _NoiseDistortion + (_Time.y * _ScrollSpeedMainX);
-            magmaUV.y += (flowNoiseVal - 0.5) * _NoiseDistortion + (_Time.y * _ScrollSpeedMainY);
-            half4 magmaTexCol = tex2D(_MainTex, magmaUV);
+            // Distorcer UVs da textura principal de magma com o ruído de fluxo
+            float2 distortedMainUV = IN.uv_MainTex * _MagmaTexScale;
+            distortedMainUV.x += (noiseVal - 0.5) * _NoiseDistortion + (_Time.y * _ScrollSpeedMainX);
+            distortedMainUV.y += (noiseVal - 0.5) * _NoiseDistortion + (_Time.y * _ScrollSpeedMainY);
+            half4 mainTexCol = tex2D(_MainTex, distortedMainUV); // Se _MainTex for branca, cor base é _Color
 
-            half3 coreAlbedo = magmaTexCol.rgb * _Color.rgb;
-            half coreAlpha = _Color.a * magmaTexCol.a; // Magma's base opacity
-            half emissionNoiseFactor = lerp(1.0, flowNoiseVal, _EmissionNoiseInfluence);
+            // Albedo base
+            half3 albedo = mainTexCol.rgb * _Color.rgb; // Combina cor da textura com _Color
+
+            // --- 2. Emissão do Núcleo (afetada pelo ruído de fluxo) ---
+            half emissionNoiseFactor = lerp(1.0, noiseVal, _EmissionNoiseInfluence); // 0.5 para que o ruído possa escurecer e clarear
             half3 coreEmission = _EmissionColor.rgb * _EmissionStrength * emissionNoiseFactor;
+            // Adicionar um pouco da cor do albedo à emissão para consistência se desejar
+            // coreEmission += albedo * 0.1 * _EmissionStrength;
 
-            // --- Fresnel Glow (Primarily for the core) ---
-            half fresnel = 1.0 - saturate(dot(IN.worldNormal, normalize(IN.viewDir))); // worldNormal is from displaced surface
+
+            // --- 3. Brilho Fresnel nas Bordas ---
+            half fresnel = 1.0 - saturate(dot(normalize(IN.worldNormal), normalize(IN.viewDir)));
             fresnel = pow(fresnel, _FresnelPower);
-            half3 fresnelEmission = _FresnelColor.rgb * fresnel * _EmissionStrength * (1.0 - IN.flamePresence); // Fade fresnel on flame parts
+            half3 fresnelEmission = _FresnelColor.rgb * fresnel * _EmissionStrength; // Fresnel também escala com a força da emissão
 
-            // --- Emitting Flames (Appear on displaced parts) ---
-            float2 flameVisualUV = IN.uv_MainTex * _FireScale;
-            flameVisualUV.y += _Time.y * _FireScrollSpeedY; // Scroll visual flame texture
-            // Optionally, distort flameVisualUV with another noise for more complex shapes
-            // float2 flameDistortUV = IN.uv_MainTex * _NoiseTexScale * 0.7 + _Time.y * 0.1;
-            // flameVisualUV.x += (tex2D(_NoiseTex, flameDistortUV).r - 0.5) * 0.2;
 
-            half flameAppearanceNoise = tex2D(_FlameAppearanceTex, flameVisualUV).r;
-            half flameAppearanceMask = smoothstep(_FireThreshold, _FireThreshold + _FireSmoothness, flameAppearanceNoise);
+            // --- 4. Chamas na Superfície (efeito de emissão adicional) ---
+            float2 surfaceFlameUV = IN.uv_MainTex * _SurfaceFlameScale;
+            surfaceFlameUV.y += _Time.y * _SurfaceFlameScrollSpeedY; // Chamas "sobem" na textura
+            // Opcional: distorcer UVs das chamas superficiais com o ruído de fluxo ou outro ruído
+            // surfaceFlameUV.x += (noiseVal - 0.5) * 0.1; // Pequena distorção para formas mais orgânicas
+
+            half surfaceFlameNoiseVal = tex2D(_SurfaceFlameTex, surfaceFlameUV).r;
+
+            // Criar formas de chamas definidas a partir do ruído
+            half surfaceFlameMask = smoothstep(
+                _SurfaceFlameThreshold,
+                _SurfaceFlameThreshold + _SurfaceFlameSmoothness,
+                surfaceFlameNoiseVal
+            );
             
-            // Combine vertex-driven flame presence with surface texture mask for final flame look
-            half finalFlameMask = IN.flamePresence * flameAppearanceMask;
+            half3 surfaceFlameEmission = _SurfaceFlameColor.rgb * surfaceFlameMask * _SurfaceFlameIntensity;
 
-            half3 flameEmission = _FireColor.rgb * finalFlameMask * _FireIntensity;
-            half flameAlpha = _FireColor.a * finalFlameMask; // Alpha for the flame parts
-
-            // --- Combine Surface Properties ---
-            // Lerp between magma and flame properties based on flamePresence from vertex shader.
-            // When flamePresence is 1, it's mostly flame. When 0, it's magma.
-
-            o.Albedo = lerp(coreAlbedo, float3(0,0,0), IN.flamePresence); // Flames have no albedo (purely emissive)
-            o.Emission = lerp(coreEmission + fresnelEmission, float3(0,0,0), IN.flamePresence) + flameEmission;
-            o.Metallic = 0.0;
-            o.Smoothness = lerp(0.2, 0.05, IN.flamePresence); // Magma is a bit smooth, flames less so
-            o.Alpha = lerp(coreAlpha, flameAlpha, IN.flamePresence); // Blend alpha from magma to flame
-            
-            // If you want flames to always be "on top" additively without affecting coreAlpha as much:
-            // o.Albedo = coreAlbedo * (1.0 - finalFlameMask); // Carve out albedo where flames are strong
-            // o.Emission = coreEmission + fresnelEmission + flameEmission;
-            // o.Alpha = coreAlpha * (1.0 - finalFlameMask * 0.5) + flameAlpha; // More complex alpha logic
-                                                                              // The lerp above is usually cleaner for a transition
+            // --- Combinar Tudo ---
+            o.Albedo = albedo;
+            // Adicionar todas as componentes emissivas
+            o.Emission = coreEmission + fresnelEmission + surfaceFlameEmission;
+            o.Metallic = 0.0;    // Não metálico
+            o.Smoothness = 0.15; // Um pouco de suavidade para o magma
+            o.Alpha = 1.0;       // Sólido
         }
         ENDCG
     }
-    FallBack "Transparent/Diffuse" // Fallback for transparent shaders
+    FallBack "Diffuse"
 }
