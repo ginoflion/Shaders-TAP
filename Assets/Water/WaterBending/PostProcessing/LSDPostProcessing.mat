@@ -29,7 +29,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ChromaticAmount: 0.063
+    - _ChromaticAmount: 0.137
     - _DistortionStrength: 0.0113
     - _GlowIntensity: 0.313
     - _PulseSpeed: 6.29
