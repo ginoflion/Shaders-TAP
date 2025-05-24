@@ -2,17 +2,12 @@ Shader "Custom/Floor"
 {
     Properties
     {
-        _GrassTex("Grass Texture (RGB)", 2D) = "white" {}
-        _MagmaTex("Magma Texture (RGB)", 2D) = "white" {}
-        _MagmaTex_UVScale("Magma Texture UV Scale", Float) = 1.0
+        _FloorTex("Floor Texture (RGB)", 2D) = "white" {}
+        _RevealTex("Reveal Texture (RGB)", 2D) = "white" {}
+        _RevealTex_UVScale("Reveal Texture UV Scale", Float) = 1.0
 
-        _EffectTransition("Magma Effect Transition Softness", Range(0.01, 2.0)) = 0.5
-        _MagmaEmission("Magma Emission Strength", Range(0, 5)) = 1.0
-
-        // Note: _DentDepth, _DentFalloff, and _TrailWidth are now controlled
-        // exclusively by the BallTrailPainter.cs script.
-        // They are declared as uniforms below but not exposed in the Material Inspector here
-        // to avoid confusion. The script MUST set them.
+        _EffectTransition("Reveal Effect Transition Softness", Range(0.01, 2.0)) = 0.5
+        _RevealEmission("Reveal Emission Strength", Range(0, 5)) = 1.0
     }
 
     SubShader
@@ -24,26 +19,26 @@ Shader "Custom/Floor"
         #pragma surface surf Standard fullforwardshadows vertex:vert addshadow
         #pragma target 3.0
 
-        sampler2D _GrassTex;
-        sampler2D _MagmaTex;
-        float _MagmaTex_UVScale;
+        sampler2D _FloorTex;
+        sampler2D _RevealTex;
+        float _RevealTex_UVScale;
 
         float _EffectTransition;
-        float _MagmaEmission;
+        float _RevealEmission;
 
-        // Uniforms controlled by C# script (BallTrailPainter.cs)
-        float _DentDepth;         // How deep the dent effect is
-        float _DentFalloff;       // How sharply the dent effect falls off
-        float _TrailWidth;        // The radius of the trail's influence and visual width
+        // Valores controlados por BallTrailPainter.cs
+        float _DentDepth;       
+        float _DentFalloff; 
+        float _TrailWidth;
 
-        float4 _BallPositionWS;    // Current end of the trail (or last known if ball destroyed)
-        float4 _TrailOriginWS;   // Fixed start of the trail
-        float _TrailEffectActive; // 0.0 (inactive) or 1.0 (active)
+        float4 _BallPositionWS;   
+        float4 _TrailOriginWS;   
+        float _TrailEffectActive;
 
         struct Input
         {
-            float2 uv_GrassTex;
-            float magmaInfluence;   // Pass combined influence from vertex to surface
+            float2 uv_FloorTex;
+            float revealInfluence;   // Pass combined influence from vertex to surface
         };
 
         // Function to calculate the distance from point P to line segment AB
@@ -83,11 +78,11 @@ Shader "Custom/Floor"
         void vert (inout appdata_full v, out Input o)
         {
             UNITY_INITIALIZE_OUTPUT(Input, o);
-            o.uv_GrassTex = v.texcoord.xy;
+            o.uv_FloorTex = v.texcoord.xy;
 
             float3 worldPosVertex = mul(unity_ObjectToWorld, v.vertex).xyz;
             float finalDentFactor = 0.0;
-            float finalMagmaInfluence = 0.0;
+            float finalRevealInfluence = 0.0;
 
             // Only calculate trail effect if it's active
             if (_TrailEffectActive > 0.5) // Use > 0.5 for float comparison to bool-like behavior
@@ -105,14 +100,14 @@ Shader "Custom/Floor"
                 
                 // --- Magma Influence based on distance to trail segment ---
                 // Similar falloff logic for magma, possibly with a softer transition.
-                float magmaEffectOuterEdge = _TrailWidth + _EffectTransition * 0.5f;
-                float magmaEffectInnerEdge = _TrailWidth - _EffectTransition * 0.5f;
+                float revealEffectOuterEdge = _TrailWidth + _EffectTransition * 0.5f;
+                float revealEffectInnerEdge = _TrailWidth - _EffectTransition * 0.5f;
                 // Ensure inner edge is not negative, especially if _TrailWidth is small.
-                magmaEffectInnerEdge = max(0.0f, magmaEffectInnerEdge); 
+                revealEffectInnerEdge = max(0.0f, revealEffectInnerEdge); 
                 
                 // smoothstep creates a smooth transition from 0 to 1 between inner and outer edges.
                 // We want 1 inside (close to trail) and 0 outside, so we use 1.0 - smoothstep.
-                finalMagmaInfluence = 1.0 - smoothstep(magmaEffectInnerEdge, magmaEffectOuterEdge, distToTrail);
+                finalRevealInfluence = 1.0 - smoothstep(revealEffectInnerEdge, revealEffectOuterEdge, distToTrail);
             }
             
             // Apply vertex displacement for the dent
@@ -120,7 +115,7 @@ Shader "Custom/Floor"
             v.vertex.xyz += displacement;
 
             // Pass magma influence to the surface shader
-            o.magmaInfluence = finalMagmaInfluence;
+            o.revealInfluence = finalRevealInfluence;
             
             // o.worldPos is not explicitly set here as it's not used by the surf function in this shader.
             // If it were, it should be recalculated AFTER displacement:
@@ -129,18 +124,18 @@ Shader "Custom/Floor"
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            float magmaBlend = IN.magmaInfluence;
+            float revealBlend = IN.revealInfluence;
 
-            half4 grassCol = tex2D(_GrassTex, IN.uv_GrassTex);
-            half4 magmaCol = tex2D(_MagmaTex, IN.uv_GrassTex * _MagmaTex_UVScale);
+            half4 floorCol = tex2D(_FloorTex, IN.uv_FloorTex);
+            half4 revealCol = tex2D(_RevealTex, IN.uv_FloorTex * _RevealTex_UVScale);
 
-            half3 finalAlbedo = lerp(grassCol.rgb, magmaCol.rgb, magmaBlend);
-            half3 finalEmission = magmaCol.rgb * magmaBlend * _MagmaEmission;
+            half3 finalAlbedo = lerp(floorCol.rgb, revealCol.rgb, revealBlend);
+            half3 finalEmission = revealCol.rgb * revealBlend * _RevealEmission;
 
             o.Albedo = finalAlbedo;
             o.Emission = finalEmission;
             o.Metallic = 0.0; // Or lerp if desired: lerp(grassMetallic, magmaMetallic, magmaBlend)
-            o.Smoothness = lerp(0.2, 0.05, magmaBlend); // Grass might be a bit smoother
+            o.Smoothness = lerp(0.2, 0.05, revealBlend); // Grass might be a bit smoother
             o.Alpha = 1.0;
         }
         ENDCG
