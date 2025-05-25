@@ -9,6 +9,13 @@ Shader "Custom/Floor"
         _EffectTransition("Magma Effect Transition Softness", Range(0.01, 2.0)) = 0.5
         _MagmaEmission("Magma Emission Strength", Range(0, 5)) = 1.0
 
+        _WaterTex("Water Texture (RGB)", 2D) = "white" {}
+        _WaterTex_UVScale("Water Texture UV Scale", Float) = 1.0
+        _WaterEmission("Water Emission Strength", Range(0, 5)) = 1.0
+
+        _BulletType("Bullet Type", Float) = 0
+
+
         // Note: _DentDepth, _DentFalloff, and _TrailWidth are now controlled
         // exclusively by the BallTrailPainter.cs script.
         // They are declared as uniforms below but not exposed in the Material Inspector here
@@ -30,6 +37,14 @@ Shader "Custom/Floor"
 
         float _EffectTransition;
         float _MagmaEmission;
+
+        float _EffectType; // 0 = fire, 1 = water, more if needed
+
+        sampler2D _WaterTex;
+        float _WaterTex_UVScale;
+        float _WaterEmission;
+
+        float _BulletType; 
 
         // Uniforms controlled by C# script (BallTrailPainter.cs)
         float _DentDepth;         // How deep the dent effect is
@@ -132,17 +147,34 @@ Shader "Custom/Floor"
             float magmaBlend = IN.magmaInfluence;
 
             half4 grassCol = tex2D(_GrassTex, IN.uv_GrassTex);
-            half4 magmaCol = tex2D(_MagmaTex, IN.uv_GrassTex * _MagmaTex_UVScale);
 
-            half3 finalAlbedo = lerp(grassCol.rgb, magmaCol.rgb, magmaBlend);
-            half3 finalEmission = magmaCol.rgb * magmaBlend * _MagmaEmission;
+            half3 effectCol;
+            float uvScale;
+            float emissionStrength;
+
+            if (_BulletType < 0.5) // Magma
+            {
+                effectCol = tex2D(_MagmaTex, IN.uv_GrassTex * _MagmaTex_UVScale).rgb;
+                uvScale = _MagmaTex_UVScale;
+                emissionStrength = _MagmaEmission;
+            }
+            else // Water
+            {
+                effectCol = tex2D(_WaterTex, IN.uv_GrassTex * _WaterTex_UVScale).rgb;
+                uvScale = _WaterTex_UVScale;
+                emissionStrength = _WaterEmission;
+            }
+
+            half3 finalAlbedo = lerp(grassCol.rgb, effectCol, magmaBlend);
+            half3 finalEmission = effectCol * magmaBlend * emissionStrength;
 
             o.Albedo = finalAlbedo;
             o.Emission = finalEmission;
-            o.Metallic = 0.0; // Or lerp if desired: lerp(grassMetallic, magmaMetallic, magmaBlend)
-            o.Smoothness = lerp(0.2, 0.05, magmaBlend); // Grass might be a bit smoother
+            o.Metallic = 0.0;
+            o.Smoothness = lerp(0.2, 0.05, magmaBlend);
             o.Alpha = 1.0;
         }
+
         ENDCG
     }
     FallBack "Diffuse"

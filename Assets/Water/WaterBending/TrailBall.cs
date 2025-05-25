@@ -1,13 +1,22 @@
 using UnityEngine;
 
+public enum BulletType
+{
+    Fire,
+    Water
+}
+
+
 public class TrailBall : MonoBehaviour
 {
+    private BulletType bulletType;
     private BallTrailPainter trailPainter;
 
-    public void Init(BallTrailPainter painter)
+    public void Init(BallTrailPainter painter, BulletType type)
     {
+        bulletType = type;
         trailPainter = painter;
-        trailPainter.AssignBall(transform);
+        trailPainter.AssignBall(transform, bulletType);
     }
 
     void OnDestroy()

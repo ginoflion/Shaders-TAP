@@ -36,19 +36,22 @@ public class BallTrailPainter : MonoBehaviour
 
     void Start()
     {
-        if (floorMaterial == null) {
-    Debug.LogError("BallTrailPainter: Floor Material not assigned!", this); 
-    enabled = false; 
-    return;
-        }
-
-        if (floorTransform == null) {
-            Debug.LogError("BallTrailPainter: Floor Transform not assigned!", this); 
-            enabled = false; 
+        if (floorMaterial == null)
+        {
+            Debug.LogError("BallTrailPainter: Floor Material not assigned!", this);
+            enabled = false;
             return;
         }
 
-        if (floorMaterial.shader.name != "Custom/InteractiveFloor_Trail") {
+        if (floorTransform == null)
+        {
+            Debug.LogError("BallTrailPainter: Floor Transform not assigned!", this);
+            enabled = false;
+            return;
+        }
+
+        if (floorMaterial.shader.name != "Custom/InteractiveFloor_Trail")
+        {
             Debug.LogWarning($"BallTrailPainter: Floor material is not using 'Custom/InteractiveFloor_Trail'. Current: {floorMaterial.shader.name}", this);
         }
 
@@ -184,7 +187,7 @@ public class BallTrailPainter : MonoBehaviour
         }
     }
 
-    public void AssignBall(Transform newBall)
+    public void AssignBall(Transform newBall, BulletType type)
     {
         ballTransform = newBall;
         _ballIsDestroyed = false;
@@ -195,7 +198,34 @@ public class BallTrailPainter : MonoBehaviour
         floorMaterial.SetVector(BallPositionWSID, _lastKnownBallPositionWS);
         floorMaterial.SetFloat(TrailEffectActiveID, 0.0f);
 
-        Debug.Log($"BallTrailPainter: Assigned new ball: {newBall.name}", this);
+        // Customize trail effect based on bullet type
+        switch (type)
+        {
+            case BulletType.Fire:
+                dentDepth = 1.15f;
+                dentFalloff = 1.0f;
+                floorMaterial.SetFloat("_EffectTransition", 0.3f);
+                floorMaterial.SetFloat("_MagmaEmission", 3.0f);
+                floorMaterial.SetFloat("_BulletType", 0.0f); // Set effect type for fire
+                break;
+
+            case BulletType.Water:
+                dentDepth = 0.05f;
+                dentFalloff = 2.0f;
+                floorMaterial.SetFloat("_EffectTransition", 0.9f);
+                floorMaterial.SetFloat("_MagmaEmission", 0.2f);
+                floorMaterial.SetFloat("_BulletType", 1.0f); // Set effect type for water
+                break;
+        }
+
+        Debug.Log($"BallTrailPainter: Assigned new {type} ball: {newBall.name}", this);
     }
+    
+    public void SetEffectType(float effectType)
+    {
+        floorMaterial.SetFloat("_EffectType", effectType);
+    }
+
+
 
 }

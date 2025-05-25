@@ -28,13 +28,20 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MagmaTex:
-        m_Texture: {fileID: 2800000, guid: 9ced4ca0e2527cc46ac7d03de81e5d34, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9f72c638069c5764f88d6fbcbdb6b7c3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTex:
+        m_Texture: {fileID: 2800000, guid: 9e91cd5bde426714d9f0ef165f143d7c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EffectTransition: 2
-    - _MagmaEmission: 0.5
+    - _BulletType: 0
+    - _EffectTransition: 0.3
+    - _MagmaEmission: 3
     - _MagmaTex_UVScale: 1
+    - _WaterEmission: 1
+    - _WaterTex_UVScale: 1
     m_Colors: []
   m_BuildTextureStacks: []
