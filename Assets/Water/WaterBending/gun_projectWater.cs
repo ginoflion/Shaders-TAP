@@ -9,6 +9,7 @@ public class gun_projectWater : MonoBehaviour
     public GameObject fireProjectile;
     public GameObject waterProjectile;
     public GameObject windProjectile;
+    public GameObject earthProjectile;
     public BallTrailPainter trailPainter;
     public Material wallMaterial;
 
@@ -33,24 +34,31 @@ public class gun_projectWater : MonoBehaviour
     {
         if (_wallInstanceMaterial == null) return; // Don't do anything if no material
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             _wallInstanceMaterial.SetFloat("_BulletType", 0.0f);
             projectile = fireProjectile;
             bulletType = BulletType.Fire;
         }
-        else if (Input.GetKeyDown(KeyCode.CapsLock))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             _wallInstanceMaterial.SetFloat("_BulletType", 1.0f);
             projectile = waterProjectile;
             bulletType = BulletType.Water;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftShift))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             _wallInstanceMaterial.SetFloat("_BulletType", 2.0f);
             projectile = windProjectile;
             bulletType = BulletType.Wind;
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            _wallInstanceMaterial.SetFloat("_BulletType", 2.0f);
+            projectile = windProjectile;
+            bulletType = BulletType.Earth;
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -82,9 +90,13 @@ public class gun_projectWater : MonoBehaviour
         {
             bulletType = BulletType.Wind;
         }
+        else if (projectile == earthProjectile)
+        {
+            bulletType = BulletType.Earth;
+        }
         else
         {
-            bulletType = BulletType.Water; 
+            bulletType = BulletType.Water;
         }
         return bulletType;
     }

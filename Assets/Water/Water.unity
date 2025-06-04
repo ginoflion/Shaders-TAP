@@ -175,6 +175,7 @@ MonoBehaviour:
   fireProjectile: {fileID: 16170953499047347, guid: 3359e14beebf6fd43979a9d07102e41f, type: 3}
   waterProjectile: {fileID: 2170114073042163411, guid: bb53751bc0e794a41a5a214a12d50aa0, type: 3}
   windProjectile: {fileID: 6035605832804507099, guid: 3eaa72fb4ee51bf4887e4e182fc3ab9f, type: 3}
+  earthProjectile: {fileID: 2170114073042163411, guid: bb53751bc0e794a41a5a214a12d50aa0, type: 3}
   trailPainter: {fileID: 1310403678}
   wallMaterial: {fileID: 2100000, guid: 77528ceb43c0d5948ae3dfcea3676c9e, type: 2}
   speed: 20
@@ -9329,9 +9330,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WaterMaterial: {fileID: 2100000, guid: 570e58304a3d2f44e87622c8a3d81d03, type: 2}
-  EarthMaterial: {fileID: 0}
+  EarthMaterial: {fileID: 2100000, guid: ddc6f12052c78244484d44119cc4e4fd, type: 2}
   WindMaterial: {fileID: 2100000, guid: 4c4b240a12adb3449b390a0036c30566, type: 2}
-  FireMaterial: {fileID: 0}
+  FireMaterial: {fileID: 2100000, guid: 614325403a210414e8810c984254b62a, type: 2}
   mat: {fileID: 0}
   gun: {fileID: 61452975}
 --- !u!1001 &1471774943721223112

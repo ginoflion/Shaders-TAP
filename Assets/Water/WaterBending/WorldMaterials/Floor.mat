@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BulletType: 1
+    - _BulletType: 3
     - _EffectTransition: 0.9
     - _MagmaDentDepth: 0.1
     - _MagmaDentFalloff: 1
