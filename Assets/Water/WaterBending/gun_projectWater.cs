@@ -69,14 +69,12 @@ public class gun_projectWater : MonoBehaviour
             if (trailBall != null && trailPainter != null)
             {
                 trailBall.Init(trailPainter, bulletType);
-                // Pass the wall's instance material to the trailPainter if it needs to modify it
-                // Or, more directly, pass the effectType/bulletType for the painter to use
-                trailPainter.SetEffectType(effectType); // Ensure this doesn't also try to set _BulletType incorrectly
+                trailPainter.SetEffectType(effectType); 
             }
         }
     }
     // ... GetBulletType can remain as is, but it's not used in this script.
-    public void GetBulletType()
+    public BulletType GetBulletType()
     {
         if (projectile == fireProjectile)
         {
@@ -94,5 +92,6 @@ public class gun_projectWater : MonoBehaviour
         {
             bulletType = BulletType.Water; // Default to Water if no projectile is set
         }
+        return bulletType;
     }
 }

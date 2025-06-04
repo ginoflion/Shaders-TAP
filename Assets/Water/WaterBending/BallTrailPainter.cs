@@ -18,7 +18,7 @@ public class BallTrailPainter : MonoBehaviour
     public float dentFalloff = 1.5f;
 
     private Vector3 _trailOriginWS;
-    private Vector3 _lastKnownBallPositionWS; // To store the ball's position
+    private Vector3 _lastKnownBallPositionWS; 
     private bool _isTrailActive = false;
     private bool _awaitingFirstEffect = true;
     private bool _ballIsDestroyed = false; // New flag
@@ -215,6 +215,13 @@ public class BallTrailPainter : MonoBehaviour
                 floorMaterial.SetFloat("_EffectTransition", 0.9f);
                 floorMaterial.SetFloat("_MagmaEmission", 0.2f);
                 floorMaterial.SetFloat("_BulletType", 1.0f); // Set effect type for water
+                break;
+            case BulletType.Wind:
+                dentDepth = 1.05f;
+                dentFalloff = 1.0f;
+                floorMaterial.SetFloat("_EffectTransition", 0.3f);
+                floorMaterial.SetFloat("_MagmaEmission", 3.0f);
+                floorMaterial.SetFloat("_BulletType", 2.0f); // Set effect type for wind
                 break;
         }
 

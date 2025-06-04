@@ -24,26 +24,27 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b900361e13e6eaa44963cb851faf3ed3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 816bb518824091e478e4510e0c8a077e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PollutionTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 9551cfb68ecbdb844822f57d14386d44, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BulletType: 2
     - _Distortion: 0.1
     - _EdgeSoftness: 0.1
     - _EffectType: 0
     - _Impact: 0.5
-    - _Radius: 0.2
+    - _Radius: 1.8
     - _ReflectionStrength: 0.3
-    - _TwistAmount: 1.5
+    - _TwistAmount: 3
     m_Colors:
     - _MainColor: {r: 0.19999996, g: 0.39999998, b: 0.29999998, a: 1}
   m_BuildTextureStacks: []

@@ -41,7 +41,9 @@ Shader "Unlit/WallShadersCombined"
             float _TwistAmount;
             float _BulletType;
 
-            float4 _PontoEmbateArray[1024];
+            float4 _PontoEmbateFireArray[1024];
+            float4 _PontoEmbateWindArray[1024];
+            float4 _PontoEmbateWaterArray[1024];
 
             struct appdata
             {
@@ -72,7 +74,7 @@ Shader "Unlit/WallShadersCombined"
 
                         for (int i = 0; i < 1024; i++)
                         {
-                            float4 ponto = _PontoEmbateArray[i];
+                            float4 ponto = _PontoEmbateWindArray[i];
                             if (ponto.w > 0.0)
                             {
                                 float3 delta = worldPos - ponto.xyz;
@@ -121,7 +123,7 @@ Shader "Unlit/WallShadersCombined"
 
                     for (int j = 0; j < 1024; j++)
                     {
-                        float4 ponto = _PontoEmbateArray[j];
+                        float4 ponto = _PontoEmbateWaterArray[j];
                         if (ponto.w > 0.0)
                         {
                             float3 delta = i.worldPos - ponto.xyz;
