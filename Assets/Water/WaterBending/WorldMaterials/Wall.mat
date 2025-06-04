@@ -24,23 +24,38 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b900361e13e6eaa44963cb851faf3ed3, type: 3}
+        m_Texture: {fileID: 2800000, guid: e251468106f8d5b409d6ee86caa99cc5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
         m_Texture: {fileID: 2800000, guid: 816bb518824091e478e4510e0c8a077e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: f62d3f45b413eb2438bb4b8b5db71ec7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _PollutionTex:
-        m_Texture: {fileID: 2800000, guid: 721615093d4257a43921b79c83fc5d09, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9551cfb68ecbdb844822f57d14386d44, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WetnessMap:
+        m_Texture: {fileID: 2800000, guid: 59416bedfcbeabd43b5c6c91580278f2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Distortion: 0.54
-    - _EdgeSoftness: 0.61
-    - _Radius: 3.9
-    - _Speed: 3.4
+    - _Darkening: 0.3
+    - _Distortion: 0.382
+    - _EdgeSoftness: 0.55
+    - _Glossiness: 0.8
+    - _Radius: 1.23
+    - _ReflectionStrength: 0.4
+    - _Speed: 1.53
+    - _WetnessAmount: 0.5
     m_Colors:
+    - _InnerColor: {r: 0.7307761, g: 0.9622642, b: 0.9600595, a: 1}
     - _MainColor: {r: 0.29125133, g: 0.5682953, b: 0.7264151, a: 1}
+    - _OuterColor: {r: 0.51686543, g: 0.73916435, b: 0.9528302, a: 1}
+    - _WetColor: {r: 0.9, g: 0.95, b: 1, a: 1}
   m_BuildTextureStacks: []

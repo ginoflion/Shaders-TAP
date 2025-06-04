@@ -4,31 +4,70 @@ using UnityEngine;
 
 public class Contact : MonoBehaviour
 {
-    public Vector4[] pontosEmbate = new Vector4[1024];
-    int contador = 0;
+    public Vector4[] pontosEmbateFire = new Vector4[1024];
+    public Vector4[] pontosEmbateWind = new Vector4[1024];
+    public Vector4[] pontosEmbateWater = new Vector4[1024];
+    int contadorFire = 0;
+    int contadorWind = 0;
+    int contadorWater = 0;
+    [SerializeField] private gun_projectWater gunProjectWater;
+    public BulletType bulletType;
     void Start()
     {
-        for (int i = 0; i < pontosEmbate.Length; i++)
+        for (int i = 0; i < pontosEmbateFire.Length; i++)
         {
-            pontosEmbate[i] = new Vector4(0, 0, 0, 1.0f);
+            pontosEmbateFire[i] = new Vector4(0, 0, 0, 1.0f);
         }
+        for (int i = 0; i < pontosEmbateWind.Length; i++)
+        {
+            pontosEmbateWind[i] = new Vector4(0, 0, 0, 1.0f);
+        }
+        for (int i = 0; i < pontosEmbateWater.Length; i++)
+        {
+            pontosEmbateWater[i] = new Vector4(0, 0, 0, 1.0f);
+        }
+
+        gunProjectWater = FindAnyObjectByType<gun_projectWater>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (gunProjectWater == null)
+        {
+            Debug.LogError("gun_projectWater component not found on this GameObject.");
+        }
+        bulletType = gunProjectWater.bulletType;
     }
 
-        void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         Vector3 worldPos = collision.GetContact(0).point;
-
-        if (contador < pontosEmbate.Length)
+        if (bulletType == BulletType.Fire)
         {
-            pontosEmbate[contador] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-            GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateArray", pontosEmbate);
-            contador++;
+            if (contadorFire < pontosEmbateFire.Length)
+            {
+                pontosEmbateFire[contadorFire] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateFireArray", pontosEmbateFire);
+                contadorFire++;
+            }
+        }
+        else if (bulletType == BulletType.Wind)
+        {
+            if (contadorWind < pontosEmbateWind.Length)
+            {
+                pontosEmbateWind[contadorWind] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateWindArray", pontosEmbateWind);
+                contadorWind++;
+            }
+        }
+        else if (bulletType == BulletType.Water)
+        {
+            if (contadorWater < pontosEmbateWater.Length)
+            {
+                pontosEmbateWater[contadorWater] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateWaterArray", pontosEmbateWater);
+                contadorWater++;
+            }
         }
     }
 }
