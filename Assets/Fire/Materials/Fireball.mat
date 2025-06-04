@@ -91,6 +91,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SurfaceActivityTex:
+        m_Texture: {fileID: 2800000, guid: f62d3f45b413eb2438bb4b8b5db71ec7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SurfaceFlameTex:
         m_Texture: {fileID: 2800000, guid: f62d3f45b413eb2438bb4b8b5db71ec7, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -109,8 +113,8 @@ Material:
     - _DstBlend: 0
     - _EmissionHeight: 5
     - _EmissionIntensity: 2
-    - _EmissionNoiseInfluence: 0.686
-    - _EmissionStrength: 8.49
+    - _EmissionNoiseInfluence: 0.829
+    - _EmissionStrength: 3.61
     - _FireHeight: 2.55
     - _FireIntensity: 2.03
     - _FireScale: 3
@@ -148,7 +152,7 @@ Material:
     - _FlameSmoothness: 0.273
     - _FlameTaperPower: 1.5
     - _FlameThreshold: 0.852
-    - _FresnelPower: 4.79
+    - _FresnelPower: 6.78
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -161,13 +165,22 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _MovementSpeed: 0.522
-    - _NoiseDistortion: 0.173
+    - _NoiseDistortion: 0.107
     - _NoiseFrequency: 5.29
     - _NoiseInfluenceOnShape: 0.02
     - _NoiseScale: 9.21
     - _NoiseTexScale: 2
     - _OcclusionStrength: 1
+    - _OverallSpeed: 3
     - _Parallax: 0.02
+    - _Ripple3DAmplitude: 0.05
+    - _Ripple3DEmissionBoost: 5
+    - _Ripple3DFrequency: 5
+    - _Ripple3DSpeed: 1
+    - _RippleAmplitude: 0.0703
+    - _RippleEmissionBoost: 1.2
+    - _RippleFrequency: 20
+    - _RippleSpeed: 4.21
     - _ScrollSpeed: 1.5
     - _ScrollSpeedMainX: 42.98
     - _ScrollSpeedMainY: 17.05
@@ -178,11 +191,14 @@ Material:
     - _SpecularHighlights: 1
     - _Speed: 1
     - _SrcBlend: 1
-    - _SurfaceFlameIntensity: 8.5
+    - _SurfaceActivityIntensity: 2
+    - _SurfaceActivityThreshold: 0.65
+    - _SurfaceFlameIntensity: 7.41
     - _SurfaceFlameScale: 3.5
     - _SurfaceFlameScrollSpeedY: 0.3
     - _SurfaceFlameSmoothness: 0.38
     - _SurfaceFlameThreshold: 0.15
+    - _TextureScale: 5
     - _TopEmissionBias: 1
     - _UVSec: 0
     - _VelocityInfluence: 5
@@ -196,18 +212,23 @@ Material:
     - _CoreEmissionColor: {r: 0.6415094, g: 0.25408807, b: 0, a: 1}
     - _CrackColor: {r: 1, g: 0.5, b: 0.09999997, a: 1}
     - _Direction: {r: 0, g: 1, b: 0, a: 0}
-    - _EmissionColor: {r: 0.4339623, g: 0, b: 0.033381633, a: 1}
+    - _EmissionColor: {r: 0.43529412, g: 0.15581201, b: 0, a: 1}
     - _FireColor: {r: 1, g: 0.7, b: 0.09999997, a: 1}
     - _FireColor1: {r: 0.7075472, g: 0, b: 0.01511855, a: 1}
     - _FireColor2: {r: 0.9433962, g: 0.65241593, b: 0.048949808, a: 1}
     - _FireColor3: {r: 1, g: 0, b: 0.040957928, a: 1}
     - _FlameColor: {r: 0.74509805, g: 0.3836894, b: 0.066666655, a: 0.8}
-    - _FresnelColor: {r: 0.49056602, g: 0, b: 0.012832155, a: 1}
+    - _FresnelColor: {r: 0.49019608, g: 0.2391426, b: 0, a: 1}
     - _HotColor: {r: 1, g: 0.8, b: 0.19999996, a: 1}
     - _MagmaColor1: {r: 1, g: 0.39999998, b: 0, a: 1}
     - _MagmaColor2: {r: 0.4528302, g: 0.0386786, b: 0, a: 1}
     - _MainColor: {r: 1, g: 0.5, b: 0, a: 1}
     - _MovementDirection: {r: 0, g: 0, b: 0, a: 0}
     - _ObjectVelocity: {r: 0, g: 0, b: 0, a: 0}
-    - _SurfaceFlameColor: {r: 0.4339623, g: 0.34058106, b: 0.030704875, a: 1}
+    - _Ripple3DCenterOS: {r: 0, g: 0, b: 0, a: 0}
+    - _Ripple3DWaveColor: {r: 0.7830189, g: 0.3514849, b: 0.15881987, a: 1}
+    - _RippleCenterUV: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _RippleWaveColor: {r: 1, g: 0.5902807, b: 0.19999999, a: 1}
+    - _SurfaceActivityColor: {r: 1, g: 0.6, b: 0, a: 1}
+    - _SurfaceFlameColor: {r: 0.29411766, g: 0.04545391, b: 0, a: 1}
   m_BuildTextureStacks: []
