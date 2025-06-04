@@ -11,7 +11,6 @@ public class gun_projectWater : MonoBehaviour
     public GameObject windProjectile;
     public BallTrailPainter trailPainter;
     public Material wallMaterial;
-    public float effectType;
 
     public float speed = 200;
 
@@ -39,21 +38,18 @@ public class gun_projectWater : MonoBehaviour
             _wallInstanceMaterial.SetFloat("_BulletType", 0.0f);
             projectile = fireProjectile;
             bulletType = BulletType.Fire;
-            effectType = 1.0f;
         }
         else if (Input.GetKeyDown(KeyCode.CapsLock))
         {
             _wallInstanceMaterial.SetFloat("_BulletType", 1.0f);
             projectile = waterProjectile;
             bulletType = BulletType.Water;
-            effectType = 0.0f;
         }
         else if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _wallInstanceMaterial.SetFloat("_BulletType", 2.0f);
             projectile = windProjectile;
             bulletType = BulletType.Wind;
-            effectType = 2.0f;
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -69,11 +65,9 @@ public class gun_projectWater : MonoBehaviour
             if (trailBall != null && trailPainter != null)
             {
                 trailBall.Init(trailPainter, bulletType);
-                trailPainter.SetEffectType(effectType); 
             }
         }
     }
-    // ... GetBulletType can remain as is, but it's not used in this script.
     public BulletType GetBulletType()
     {
         if (projectile == fireProjectile)
@@ -90,7 +84,7 @@ public class gun_projectWater : MonoBehaviour
         }
         else
         {
-            bulletType = BulletType.Water; // Default to Water if no projectile is set
+            bulletType = BulletType.Water; 
         }
         return bulletType;
     }

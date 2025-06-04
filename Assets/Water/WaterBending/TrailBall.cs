@@ -4,7 +4,8 @@ public enum BulletType
 {
     Fire,
     Water,
-    Wind
+    Wind,
+    Earth
 }
 
 
@@ -18,13 +19,5 @@ public class TrailBall : MonoBehaviour
         bulletType = type;
         trailPainter = painter;
         trailPainter.AssignBall(transform, bulletType);
-    }
-
-    void OnDestroy()
-    {
-        if (trailPainter != null)
-        {
-            trailPainter.NotifyBallDestroyed(transform.position);
-        }
     }
 }

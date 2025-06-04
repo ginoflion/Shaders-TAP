@@ -67,6 +67,14 @@ Shader "Custom/Floor_Unlit"
             float _WaterDentFalloff;
             float _WaterTrailWidth;
 
+            sampler2D _EarthTex;
+            float _EarthTex_UVScale;
+            float _EarthEmission;
+            float _EarthEffectTransition;
+            float _EarthDentDepth;
+            float _EarthDentFalloff;
+            float _EarthTrailWidth;
+
             float _BulletType;
             float4 _BallPositionWS;
             float4 _TrailOriginWS;
@@ -120,12 +128,19 @@ Shader "Custom/Floor_Unlit"
                     trailWidth = _WaterTrailWidth;
                     effectTransition = _WaterEffectTransition;
                 }
-                else
+                else if (_BulletType == 2)
                 {
                     dentDepth = _WindDentDepth;
                     dentFalloff = _WindDentFalloff;
                     trailWidth = _WindTrailWidth;
                     effectTransition = _WindEffectTransition;
+                }
+                else
+                {
+                    dentDepth = _EarthDentDepth;
+                    dentFalloff = _EarthDentFalloff;
+                    trailWidth = _EarthTrailWidth;
+                    effectTransition = _EarthEffectTransition;
                 }
 
                 float influence = 0;
@@ -165,11 +180,16 @@ Shader "Custom/Floor_Unlit"
                     effectColor = tex2D(_WaterTex, i.uv * _WaterTex_UVScale).rgb;
                     emission = _WaterEmission;
                 }
-                else
+                else if (_BulletType == 2)
                 {
                     effectColor = tex2D(_WindTex, i.uv * _WindTex_UVScale).rgb;
                     emission = _WindEmission;
                 }
+                else
+                {
+                    effectColor = tex2D(_EarthTex, i.uv * _EarthTex_UVScale).rgb;
+                    emission = _EarthEmission;
+                }       
 
                 fixed3 col = lerp(grass.rgb, effectColor, i.influence);
                 fixed3 emissive = effectColor * i.influence * emission;
