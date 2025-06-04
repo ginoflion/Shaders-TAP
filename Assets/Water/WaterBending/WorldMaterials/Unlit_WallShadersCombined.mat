@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Polluted
-  m_Shader: {fileID: 4800000, guid: 9e7913cad2450e14ba9f0b9f537872cd, type: 3}
+  m_Name: Unlit_WallShadersCombined
+  m_Shader: {fileID: 4800000, guid: 4e3a178d96e378744be18ca6242bcc20, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -28,30 +28,22 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: f62d3f45b413eb2438bb4b8b5db71ec7, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PollutionTex:
-        m_Texture: {fileID: 2800000, guid: 9551cfb68ecbdb844822f57d14386d44, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.764
-    - _Distortion: 0.39
-    - _FadeSpeed: 4.73
-    - _FlowSpeed: 0.5
-    - _Murkiness: 0.7
-    - _OilAmount: 0.4
-    - _ScumAmount: 0.3
-    - _Speed: 1.68
-    - _WaveFreq: 1.55
-    - _WaveHeight: 0.02
-    - _WaveStrength: 0.161
+    - _Distortion: 0.1
+    - _EdgeSoftness: 0.1
+    - _EffectType: 0
+    - _Impact: 0.5
+    - _Radius: 0.2
+    - _ReflectionStrength: 0.3
+    - _TwistAmount: 1.5
     m_Colors:
-    - _DirtyColor: {r: 0.5754717, g: 0.4751442, b: 0.36645603, a: 1}
-    - _MainColor: {r: 0.32039872, g: 0.523388, b: 0.9056604, a: 1}
-    - _OilColor: {r: 0.6981132, g: 0.3359582, b: 0.062566735, a: 1}
-    - _PollutionColor: {r: 1, g: 0, b: 0.3636365, a: 1}
-    - _ScumColor: {r: 0.24096648, g: 0.3584906, b: 0.12344251, a: 1}
+    - _MainColor: {r: 0.19999996, g: 0.39999998, b: 0.29999998, a: 1}
   m_BuildTextureStacks: []

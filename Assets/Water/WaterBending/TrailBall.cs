@@ -3,7 +3,8 @@ using UnityEngine;
 public enum BulletType
 {
     Fire,
-    Water
+    Water,
+    Wind
 }
 
 
