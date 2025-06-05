@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _EarthTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: d4c550693415f034e98283c6a3be738e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GrassTex:
@@ -46,12 +46,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _BulletType: 3
-    - _EarthDentDepth: 0.1
-    - _EarthDentFalloff: 1
-    - _EarthEffectTransition: 0.5
-    - _EarthEmission: 1
+    - _EarthDentDepth: -0.797
+    - _EarthDentFalloff: 0.668
+    - _EarthEffectTransition: 2
+    - _EarthEmission: 3.06
     - _EarthTex_UVScale: 1
-    - _EarthTrailWidth: 0.1
+    - _EarthTrailWidth: 1.723
     - _EffectTransition: 0.9
     - _MagmaDentDepth: 1.41
     - _MagmaDentFalloff: 0.55

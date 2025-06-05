@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_WallShadersCombined
+  m_Name: bamboo
   m_Shader: {fileID: 4800000, guid: 4e3a178d96e378744be18ca6242bcc20, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _ImpactTex:
-        m_Texture: {fileID: 2800000, guid: 9f72c638069c5764f88d6fbcbdb6b7c3, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -32,28 +32,25 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 816bb518824091e478e4510e0c8a077e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PollutionTex:
-        m_Texture: {fileID: 2800000, guid: 9551cfb68ecbdb844822f57d14386d44, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BulletType: 2
+    - _BulletType: 0
     - _Distortion: 0.1
     - _EdgeSoftness: 0.1
-    - _EffectType: 0
     - _EmissionDecayTime: 1.5
-    - _Impact: 0.5
-    - _ImpactPush: 0.5
-    - _ImpactPushStrength: 2
+    - _ImpactPushStrength: 0.1
     - _MaxEmissionStrength: 2
     - _MinPersistentEmission: 0.2
-    - _Radius: 1.8
+    - _Radius: 0.2
     - _ReflectionStrength: 0.3
-    - _TwistAmount: 3
+    - _TwistAmount: 1.5
     m_Colors:
     - _ImpactEmissionColor: {r: 1, g: 0.5, b: 0, a: 1}
     - _MainColor: {r: 0.19999996, g: 0.39999998, b: 0.29999998, a: 1}

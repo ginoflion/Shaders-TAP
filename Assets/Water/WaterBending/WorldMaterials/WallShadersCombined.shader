@@ -57,6 +57,7 @@ Shader "Unlit/WallShadersCombined"
             float4 _PontoEmbateFireArray[1024];  // Type 0: xyz=pos, w=impactTime
             float4 _PontoEmbateWaterArray[1024]; // Type 1: xyz=pos, w=intensity
             float4 _PontoEmbateWindArray[1024];  // Type 2: xyz=pos, w=intensity
+            float4 _PontoEmbateEarthArray[512]; 
 
             struct appdata
             {
@@ -145,6 +146,37 @@ Shader "Unlit/WallShadersCombined"
 
                                 float3 twistedOffset = float3(rotatedX, localDelta.y, rotatedZ) - localDelta;
                                 modifiedWorldPos += twistedOffset;
+                            }
+                        }
+                    }
+                }else if(_BulletType == 3.0)
+                {
+                    for (int i = 0; i < 512; i++)
+                    {
+                        float4 ponto = _PontoEmbateEarthArray[i];
+                        if (ponto.w > 0.001) // Se o impacto está ativo (tempo de impacto válido)
+                        {
+                            float impactTime = ponto.w;
+                            float age = _Time.y - impactTime;
+
+                            // O amassado deve persistir enquanto o efeito de glow estiver ativo,
+                            // ou talvez por um tempo um pouco maior.
+                            // Por simplicidade, vamos fazê-lo persistir enquanto age < _EmissionDecayTime * 1.5 (um pouco mais que o glow forte)
+                            // Ou, para que o amassado seja tão persistente quanto o brilho mínimo,
+                            // ele só desaparece quando o ponto é sobrescrito no array.
+                            // A condição ponto.w > 0.001 já garante isso.
+
+                            float3 delta = modifiedWorldPos - ponto.xyz;
+                            float dist = length(delta);
+
+                            if (dist <= _Radius)
+                            {
+                                float t = saturate(1.0 - dist / _Radius);
+                                t = t * t; // Para um falloff mais acentuado (quadrático)
+
+                                // Empurra o vértice para dentro ao longo da sua normal original
+                                // O ponto.w (tempo) não é usado para a força aqui, apenas para saber se está ativo.
+                                modifiedWorldPos += worldNormalInput * _ImpactPushStrength * t;
                             }
                         }
                     }
@@ -245,6 +277,10 @@ Shader "Unlit/WallShadersCombined"
                         baseColor.rgb += reflection * pollutionColor.rgb * 0.8; 
                         return baseColor; 
                     }
+                }
+                else if(_BulletType == 3.0)
+                {
+
                 }
                 
                 baseColor.rgb += accumulatedEmission; // Adiciona a emissão acumulada (do tipo 0, se houver)

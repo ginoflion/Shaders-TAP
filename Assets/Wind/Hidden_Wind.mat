@@ -32,6 +32,8 @@ Material:
     - _Amplitude: 0.02
     - _DistortionFrequency: 0.53
     - _DistortionStrength: 0.12
+    - _FogIntensity: 0.563
+    - _FogSpeed: 0.445
     - _Frequency: 0.11
     - _Speed: 1.43
     - _TimeSpeed: 1
