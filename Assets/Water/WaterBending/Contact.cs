@@ -2,87 +2,135 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Supondo que seu enum BulletType esteja definido em outro lugar,
+// e que BulletType.Fire corresponde ao valor 0.
+// public enum BulletType
+// {
+//     Fire = 0,
+//     Water = 1,
+//     Wind = 2,
+//     Earth = 3 // Este tipo pode não ser mais usado se o efeito foi para o Fire
+// }
+
 public class Contact : MonoBehaviour
 {
+    // Para Fire (Tipo 0 - Impacto Emissivo): w = Time.time do impacto
     public Vector4[] pontosEmbateFire = new Vector4[1024];
+    // Para Wind (Tipo 2 - Deformação): w = intensidade (ex: 1.0f)
     public Vector4[] pontosEmbateWind = new Vector4[1024];
+    // Para Water (Tipo 1 - Poluição): w = intensidade (ex: 1.0f)
     public Vector4[] pontosEmbateWater = new Vector4[1024];
+    // O array pontosEmbateEarth pode não ser mais necessário se o seu BulletType.Earth (tipo 3)
+    // não tiver um efeito dedicado ou se você não tiver mais um tipo 3.
+    // Vou mantê-lo aqui caso você tenha outros planos para ele.
     public Vector4[] pontosEmbateEarth = new Vector4[1024];
+
     int contadorFire = 0;
     int contadorWind = 0;
     int contadorWater = 0;
     int contadorEarth = 0;
+
     [SerializeField] private gun_projectWater gunProjectWater;
-    public BulletType bulletType;
+    public BulletType currentBulletType; // Vem do script da arma
+
+    private Material objectMaterial;
+
     void Start()
     {
-        for (int i = 0; i < pontosEmbateFire.Length; i++)
+        Renderer rend = GetComponent<Renderer>();
+        if (rend != null)
         {
-            pontosEmbateFire[i] = new Vector4(0, 0, 0, 1.0f);
+            objectMaterial = rend.material;
         }
-        for (int i = 0; i < pontosEmbateWind.Length; i++)
+        else
         {
-            pontosEmbateWind[i] = new Vector4(0, 0, 0, 1.0f);
-        }
-        for (int i = 0; i < pontosEmbateWater.Length; i++)
-        {
-            pontosEmbateWater[i] = new Vector4(0, 0, 0, 1.0f);
-        }
-        for (int i = 0; i < pontosEmbateEarth.Length; i++)
-        {
-            pontosEmbateEarth[i] = new Vector4(0, 0, 0, 1.0f);
+            Debug.LogError("Objeto não possui Renderer!", this);
+            this.enabled = false;
+            return;
         }
 
-        gunProjectWater = FindAnyObjectByType<gun_projectWater>();
+        // Inicialização:
+        // Para Fire (impacto emissivo), w = 0.0f significa inativo.
+        for (int i = 0; i < pontosEmbateFire.Length; i++) { pontosEmbateFire[i] = Vector4.zero; }
+        // Para Wind/Water, w = 0.0f significa sem intensidade ou inativo.
+        for (int i = 0; i < pontosEmbateWind.Length; i++) { pontosEmbateWind[i] = Vector4.zero; }
+        for (int i = 0; i < pontosEmbateWater.Length; i++) { pontosEmbateWater[i] = Vector4.zero; }
+        for (int i = 0; i < pontosEmbateEarth.Length; i++) { pontosEmbateEarth[i] = Vector4.zero; }
+
+        if (gunProjectWater == null)
+        {
+            gunProjectWater = FindAnyObjectByType<gun_projectWater>();
+        }
+        if (gunProjectWater == null)
+        {
+            Debug.LogError("gun_projectWater não encontrado na cena.", this);
+        }
+
+        if (objectMaterial != null)
+        {
+            // Enviar arrays inicializados para o shader
+            objectMaterial.SetVectorArray("_PontoEmbateFireArray", pontosEmbateFire);
+            objectMaterial.SetVectorArray("_PontoEmbateWindArray", pontosEmbateWind);
+            objectMaterial.SetVectorArray("_PontoEmbateWaterArray", pontosEmbateWater);
+            // Se você não usa mais o tipo Earth (3), não precisa enviar este array,
+            // mas o shader também já não o utiliza.
+            // objectMaterial.SetVectorArray("_PontoEmbateEarthArray", pontosEmbateEarth);
+        }
     }
 
     void Update()
     {
-        if (gunProjectWater == null)
+        if (gunProjectWater != null)
         {
-            Debug.LogError("gun_projectWater component not found on this GameObject.");
+            currentBulletType = gunProjectWater.bulletType;
         }
-        bulletType = gunProjectWater.bulletType;
+
+        if (objectMaterial != null)
+        {
+            objectMaterial.SetFloat("_BulletType", (float)currentBulletType);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        Vector3 worldPos = collision.GetContact(0).point;
-        if (bulletType == BulletType.Fire)
+        if (objectMaterial == null) return;
+
+        ContactPoint contactPoint = collision.GetContact(0);
+        Vector3 worldPos = contactPoint.point;
+
+        // Seu enum BulletType define os valores numéricos.
+        // Supondo que BulletType.Fire seja 0, BulletType.Water seja 1, etc.
+        switch (currentBulletType)
         {
-            if (contadorFire < pontosEmbateFire.Length)
-            {
-                pontosEmbateFire[contadorFire] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateFireArray", pontosEmbateFire);
-                contadorFire++;
-            }
-        }
-        else if (bulletType == BulletType.Wind)
-        {
-            if (contadorWind < pontosEmbateWind.Length)
-            {
-                pontosEmbateWind[contadorWind] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateWindArray", pontosEmbateWind);
-                contadorWind++;
-            }
-        }
-        else if (bulletType == BulletType.Water)
-        {
-            if (contadorWater < pontosEmbateWater.Length)
-            {
-                pontosEmbateWater[contadorWater] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateWaterArray", pontosEmbateWater);
-                contadorWater++;
-            }
-        }
-        else
-        {
-            if (contadorEarth < pontosEmbateEarth.Length)
-            {
-                pontosEmbateEarth[contadorWater] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-                GetComponent<Renderer>().material.SetVectorArray("_PontoEmbateWaterArray", pontosEmbateEarth);
-                contadorEarth++;
-            }
+            case BulletType.Fire: // Este é o TIPO 0 - Impacto Emissivo
+                pontosEmbateFire[contadorFire] = new Vector4(worldPos.x, worldPos.y, worldPos.z, Time.time);
+                objectMaterial.SetVectorArray("_PontoEmbateFireArray", pontosEmbateFire);
+                contadorFire = (contadorFire + 1) % pontosEmbateFire.Length;
+                break;
+
+            case BulletType.Wind: // Este é o TIPO 2 - Deformação Vento
+                pontosEmbateWind[contadorWind] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f); // w = intensidade
+                objectMaterial.SetVectorArray("_PontoEmbateWindArray", pontosEmbateWind);
+                contadorWind = (contadorWind + 1) % pontosEmbateWind.Length;
+                break;
+
+            case BulletType.Water: // Este é o TIPO 1 - Poluição Água
+                pontosEmbateWater[contadorWater] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f); // w = intensidade
+                objectMaterial.SetVectorArray("_PontoEmbateWaterArray", pontosEmbateWater);
+                contadorWater = (contadorWater + 1) % pontosEmbateWater.Length;
+                break;
+
+            // Se você ainda tiver um BulletType.Earth (tipo 3) com um efeito diferente:
+            case BulletType.Earth: // Este seria o TIPO 3 (se existir e tiver efeito)
+                // Se você tiver um efeito para Earth, implemente aqui.
+                // Por exemplo, se fosse um decalque simples sem decaimento:
+                // pontosEmbateEarth[contadorEarth] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+                // objectMaterial.SetVectorArray("_PontoEmbateEarthArray", pontosEmbateEarth); // Precisaria de _PontoEmbateEarthArray no shader
+                // contadorEarth = (contadorEarth + 1) % pontosEmbateEarth.Length;
+                // Como o shader não usa mais _PontoEmbateEarthArray, esta seção não teria efeito visual
+                // a menos que você readicione o array e a lógica no shader para o tipo 3.
+                Debug.Log("BulletType.Earth colidiu, mas não há efeito visual configurado para ele no shader atual (Tipo 3).");
+                break;
         }
     }
 }

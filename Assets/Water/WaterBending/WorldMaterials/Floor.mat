@@ -41,14 +41,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BulletType: 0
+    - _BulletType: 2
     - _EffectTransition: 0.9
-    - _MagmaDentDepth: 0.2
-    - _MagmaDentFalloff: 1
-    - _MagmaEffectTransition: 0.5
-    - _MagmaEmission: 1.23
+    - _MagmaDentDepth: 1.41
+    - _MagmaDentFalloff: 0.55
+    - _MagmaEffectTransition: 1.61
+    - _MagmaEmission: 3.32
     - _MagmaTex_UVScale: 1
-    - _MagmaTrailWidth: 1.375
+    - _MagmaTrailWidth: 2
     - _WaterDentDepth: 0.1
     - _WaterDentFalloff: 1.445
     - _WaterEffectTransition: 0.5
