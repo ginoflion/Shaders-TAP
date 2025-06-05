@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 816bb518824091e478e4510e0c8a077e, type: 3}
+        m_Texture: {fileID: 2800000, guid: d7d10b6939530514a9f11495fe1f87fc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -37,10 +37,14 @@ Material:
     - _EdgeSoftness: 0.15
     - _FlameIntensity: 1
     - _FlameShapeBias: 0.8
+    - _GradientIntensity: 1
     - _NoiseScale: 10
     - _NoiseSpeedX: 0.1
     - _NoiseSpeedY: 0.5
     m_Colors:
     - _FlameColor1: {r: 1, g: 0.8, b: 0.19999996, a: 1}
     - _FlameColor2: {r: 0.8, g: 0.19999996, b: 0, a: 1}
+    - _GradientColorBottom: {r: 1, g: 0, b: 0, a: 0.12941177}
+    - _GradientColorTop: {r: 0.9245283, g: 0.05669277, b: 0.12156863, a: 0.0627451}
+    - _OverallTint: {r: 1, g: 0, b: 0, a: 0.078431375}
   m_BuildTextureStacks: []

@@ -27,9 +27,17 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: f9437306e10bf7d4995a632c61d1bb2d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _WaveAmount: 0.0072
+    - _NoiseOpacity: 0.068
+    - _NoiseScale: 6.97
+    - _NoiseSpeed: 0.272
+    - _WaveAmount: 0.00943
     m_Colors:
+    - _NoiseColor: {r: 0.89284444, g: 0.9056604, b: 0.8954049, a: 0.39607844}
     - _WaterColor: {r: 0.5801887, g: 0.7900944, b: 1, a: 0.03529412}
   m_BuildTextureStacks: []

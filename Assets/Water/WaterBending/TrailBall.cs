@@ -5,7 +5,8 @@ public enum BulletType
     Fire,
     Water,
     Wind,
-    Earth
+    Earth,
+    None
 }
 
 
@@ -19,5 +20,17 @@ public class TrailBall : MonoBehaviour
         bulletType = type;
         trailPainter = painter;
         trailPainter.AssignBall(transform, bulletType);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), collision.collider);
+        }
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }   
     }
 }

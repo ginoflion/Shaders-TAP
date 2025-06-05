@@ -13,9 +13,20 @@ public class gun_projectWater : MonoBehaviour
     public BallTrailPainter trailPainter;
     public Material wallMaterial;
 
+
+    [Header("Sphere Settings")]
+    public Material fireSphereMaterial;
+    public Material waterSphereMaterial;
+    public Material windSphereMaterial;
+
+    public Material earthSphereMaterial;
+
+    public GameObject Sphere;
+    public Material sphereMaterial;
+
     public float speed = 200;
 
-     public Renderer targetWallRenderer; // Assign your wall's Renderer component in the Inspector
+    public Renderer targetWallRenderer; // Assign your wall's Renderer component in the Inspector
     private Material _wallInstanceMaterial; // To store the instance
 
     void Start()
@@ -36,24 +47,32 @@ public class gun_projectWater : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            sphereMaterial = fireSphereMaterial;
+            Sphere.GetComponent<Renderer>().material = sphereMaterial;
             _wallInstanceMaterial.SetFloat("_BulletType", 0.0f);
             projectile = fireProjectile;
             bulletType = BulletType.Fire;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            sphereMaterial = waterSphereMaterial;
+            Sphere.GetComponent<Renderer>().material = sphereMaterial;
             _wallInstanceMaterial.SetFloat("_BulletType", 1.0f);
             projectile = waterProjectile;
             bulletType = BulletType.Water;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            sphereMaterial = windSphereMaterial;
+            Sphere.GetComponent<Renderer>().material = sphereMaterial;
             _wallInstanceMaterial.SetFloat("_BulletType", 2.0f);
             projectile = windProjectile;
             bulletType = BulletType.Wind;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
+            sphereMaterial = earthSphereMaterial;
+            Sphere.GetComponent<Renderer>().material = sphereMaterial;
             _wallInstanceMaterial.SetFloat("_BulletType", 2.0f);
             projectile = windProjectile;
             bulletType = BulletType.Earth;
@@ -62,9 +81,10 @@ public class gun_projectWater : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            Quaternion spawnRotation = transform.rotation * Quaternion.Euler(0, 90, 0);
             GameObject instantiatedProjectile = Instantiate(projectile,
                                                            transform.position,
-                                                           transform.rotation)
+                                                           spawnRotation)
                 as GameObject;
 
             instantiatedProjectile.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, speed));
