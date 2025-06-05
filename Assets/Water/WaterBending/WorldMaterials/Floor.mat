@@ -45,7 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BulletType: 2
+    - _BulletType: 0
     - _EarthDentDepth: -0.797
     - _EarthDentFalloff: 0.668
     - _EarthEffectTransition: 2

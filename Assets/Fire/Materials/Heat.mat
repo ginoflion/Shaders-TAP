@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PostProcessing_ScreenEdgeFlames_MaterialEditable
+  m_Name: Heat
   m_Shader: {fileID: 4800000, guid: 563935a069ddcaa43bc2300a3764559e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DistortionTex:
+        m_Texture: {fileID: 2800000, guid: 9ced4ca0e2527cc46ac7d03de81e5d34, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -34,10 +38,16 @@ Material:
     m_Ints: []
     m_Floats:
     - _DistortionAmount: 0.03
+    - _DistortionMaskPower: 2
+    - _DistortionScale: 5
+    - _DistortionSpeedX: 0.5
+    - _DistortionSpeedY: 0.5
+    - _DistortionStrength: 0.01
     - _EdgeSoftness: 0.15
     - _FlameIntensity: 1
     - _FlameShapeBias: 0.8
-    - _GradientIntensity: 1
+    - _GradientIntensity: 0.15
+    - _GradientRadius: 0.5
     - _NoiseScale: 10
     - _NoiseSpeedX: 0.1
     - _NoiseSpeedY: 0.5
@@ -45,6 +55,8 @@ Material:
     - _FlameColor1: {r: 1, g: 0.8, b: 0.19999996, a: 1}
     - _FlameColor2: {r: 0.8, g: 0.19999996, b: 0, a: 1}
     - _GradientColorBottom: {r: 1, g: 0, b: 0, a: 0.12941177}
+    - _GradientColorCenter: {r: 0.745283, g: 0.08515009, b: 0, a: 1}
+    - _GradientColorOuter: {r: 0.8301887, g: 0.7802084, b: 0, a: 1}
     - _GradientColorTop: {r: 0.9245283, g: 0.05669277, b: 0.12156863, a: 0.0627451}
     - _OverallTint: {r: 1, g: 0, b: 0, a: 0.078431375}
   m_BuildTextureStacks: []
