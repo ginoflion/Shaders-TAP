@@ -2,15 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Supondo que seu enum BulletType esteja definido em outro lugar,
-// e que BulletType.Fire corresponde ao valor 0.
-// public enum BulletType
-// {
-//     Fire = 0,
-//     Water = 1,
-//     Wind = 2,
-//     Earth = 3 // Este tipo pode não ser mais usado se o efeito foi para o Fire
-// }
 
 public class Contact : MonoBehaviour
 {
@@ -72,9 +63,7 @@ public class Contact : MonoBehaviour
             objectMaterial.SetVectorArray("_PontoEmbateFireArray", pontosEmbateFire);
             objectMaterial.SetVectorArray("_PontoEmbateWindArray", pontosEmbateWind);
             objectMaterial.SetVectorArray("_PontoEmbateWaterArray", pontosEmbateWater);
-            // Se você não usa mais o tipo Earth (3), não precisa enviar este array,
-            // mas o shader também já não o utiliza.
-            // objectMaterial.SetVectorArray("_PontoEmbateEarthArray", pontosEmbateEarth);
+            objectMaterial.SetVectorArray("_PontoEmbateEarthArray", pontosEmbateEarth);
         }
     }
 
@@ -120,16 +109,10 @@ public class Contact : MonoBehaviour
                 contadorWater = (contadorWater + 1) % pontosEmbateWater.Length;
                 break;
 
-            // Se você ainda tiver um BulletType.Earth (tipo 3) com um efeito diferente:
-            case BulletType.Earth: // Este seria o TIPO 3 (se existir e tiver efeito)
-                // Se você tiver um efeito para Earth, implemente aqui.
-                // Por exemplo, se fosse um decalque simples sem decaimento:
-                // pontosEmbateEarth[contadorEarth] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
-                // objectMaterial.SetVectorArray("_PontoEmbateEarthArray", pontosEmbateEarth); // Precisaria de _PontoEmbateEarthArray no shader
-                // contadorEarth = (contadorEarth + 1) % pontosEmbateEarth.Length;
-                // Como o shader não usa mais _PontoEmbateEarthArray, esta seção não teria efeito visual
-                // a menos que você readicione o array e a lógica no shader para o tipo 3.
-                Debug.Log("BulletType.Earth colidiu, mas não há efeito visual configurado para ele no shader atual (Tipo 3).");
+            case BulletType.Earth:
+                pontosEmbateEarth[contadorEarth] = new Vector4(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+                objectMaterial.SetVectorArray("_PontoEmbateEarthArray", pontosEmbateEarth);
+                contadorEarth = (contadorEarth + 1) % pontosEmbateEarth.Length;
                 break;
         }
     }
