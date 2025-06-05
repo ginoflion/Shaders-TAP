@@ -45,6 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+<<<<<<< Updated upstream
     - _BulletType: 3
     - _EarthDentDepth: -0.797
     - _EarthDentFalloff: 0.668
@@ -52,6 +53,9 @@ Material:
     - _EarthEmission: 3.06
     - _EarthTex_UVScale: 1
     - _EarthTrailWidth: 1.723
+=======
+    - _BulletType: 1
+>>>>>>> Stashed changes
     - _EffectTransition: 0.9
     - _MagmaDentDepth: 1.41
     - _MagmaDentFalloff: 0.55
