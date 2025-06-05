@@ -73,8 +73,8 @@ public class gun_projectWater : MonoBehaviour
         {
             sphereMaterial = earthSphereMaterial;
             Sphere.GetComponent<Renderer>().material = sphereMaterial;
-            _wallInstanceMaterial.SetFloat("_BulletType", 2.0f);
-            projectile = windProjectile;
+            _wallInstanceMaterial.SetFloat("_BulletType", 3.0f);
+            projectile = earthProjectile;
             bulletType = BulletType.Earth;
         }
 

@@ -15,18 +15,26 @@ Shader "Custom/Floor_Unlit"
         _WindTex("Wind Texture (RGB)", 2D) = "white" {}
         _WindTex_UVScale("Wind Texture UV Scale", Float) = 1.0
         _WindEmission("Wind Emission Strength", Range(0, 5)) = 1.0
-        _WindEffectTransition("Magma Effect Transition Softness", Range(0.01, 2.0)) = 0.5
-        _WindDentDepth("Magma Dent Depth", Range(0.0,2.0)) = 0.1
-        _WindDentFalloff("Magma Dent Falloff", Range(0.01, 2.0)) = 1.0
-        _WindTrailWidth("Magma Trail Width", Range(0.01, 2.0)) = 0.1
+        _WindEffectTransition("Wind Effect Transition Softness", Range(0.01, 2.0)) = 0.5
+        _WindDentDepth("Wind Dent Depth", Range(0.0,2.0)) = 0.1
+        _WindDentFalloff("Wind Dent Falloff", Range(0.01, 2.0)) = 1.0
+        _WindTrailWidth("Wind Trail Width", Range(0.01, 2.0)) = 0.1
 
         _WaterTex("Water Texture (RGB)", 2D) = "white" {}
         _WaterTex_UVScale("Water Texture UV Scale", Float) = 1.0
         _WaterEmission("Water Emission Strength", Range(0, 5)) = 1.0
         _WaterEffectTransition("Water Effect Transition Softness", Range(0.01, 2.0)) = 0.5
-        _WaterDentDepth("Magma Dent Depth", Range(0.0,2.0)) = 0.1
-        _WaterDentFalloff("Magma Dent Falloff", Range(0.01, 2.0)) = 1.0
-        _WaterTrailWidth("Magma Trail Width", Range(0.01, 2.0)) = 0.1
+        _WaterDentDepth("Water Dent Depth", Range(0.0,2.0)) = 0.1
+        _WaterDentFalloff("Water Dent Falloff", Range(0.01, 2.0)) = 1.0
+        _WaterTrailWidth("Water Trail Width", Range(0.01, 2.0)) = 0.1
+
+        _EarthTex("Earth Texture (RGB)", 2D) = "white" {}
+        _EarthTex_UVScale("Earth Texture UV Scale", Float) = 1.0
+        _EarthEmission("Earth Emission Strength", Range(0, 5)) = 1.0
+        _EarthEffectTransition("Earth Effect Transition Softness", Range(0.01, 2.0)) = 0.5
+        _EarthDentDepth("Earth Dent Depth", Range(-2.0,0)) = 0.1
+        _EarthDentFalloff("Earth Dent Falloff", Range(0.01, 2.0)) = 1.0
+        _EarthTrailWidth("Earth Trail Width", Range(0.01, 2.0)) = 0.1
 
         _BulletType("Bullet Type", Float) = 0
     }

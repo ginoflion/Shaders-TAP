@@ -1034,13 +1034,13 @@ MonoBehaviour:
   fireProjectile: {fileID: 16170953499047347, guid: 3359e14beebf6fd43979a9d07102e41f, type: 3}
   waterProjectile: {fileID: 2170114073042163411, guid: bb53751bc0e794a41a5a214a12d50aa0, type: 3}
   windProjectile: {fileID: 6035605832804507099, guid: 3eaa72fb4ee51bf4887e4e182fc3ab9f, type: 3}
-  earthProjectile: {fileID: 6035605832804507099, guid: 3eaa72fb4ee51bf4887e4e182fc3ab9f, type: 3}
+  earthProjectile: {fileID: 7714313750286584079, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
   trailPainter: {fileID: 1310403678}
   wallMaterial: {fileID: 2100000, guid: 77528ceb43c0d5948ae3dfcea3676c9e, type: 2}
   fireSphereMaterial: {fileID: 2100000, guid: a5bca169796d0254caddd9072cb51598, type: 2}
   waterSphereMaterial: {fileID: 2100000, guid: cd551e257e289fd4c96b0470ca9ad880, type: 2}
   windSphereMaterial: {fileID: 2100000, guid: 39ab4cb90d0d5a44ba5a695c2c8a2af7, type: 2}
-  earthSphereMaterial: {fileID: 2100000, guid: 13a8a9b378056f843ae4457427438646, type: 2}
+  earthSphereMaterial: {fileID: 2100000, guid: ddc94d783a7346946897d9fe148eb141, type: 2}
   Sphere: {fileID: 1404687996}
   sphereMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   speed: 50
@@ -1799,6 +1799,7 @@ Transform:
   - {fileID: 923637125}
   - {fileID: 223783490}
   - {fileID: 1748174577}
+  - {fileID: 1614277392}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1585980069 stripped
@@ -1930,6 +1931,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -0.077, y: -0.097, z: 0.07}
+--- !u!1001 &1614277391
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1550090112}
+    m_Modifications:
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.6153641
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.3611803
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -12.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714313750286584079, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+      propertyPath: m_Name
+      value: Earth
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+--- !u!4 &1614277392 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1697991787517074510, guid: 541b6a52d1ae7164981b71b087c17dd6, type: 3}
+  m_PrefabInstance: {fileID: 1614277391}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1664465284
 GameObject:
   m_ObjectHideFlags: 0
@@ -6063,7 +6126,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   gunProjectWater: {fileID: 0}
-  bulletType: 0
+  currentBulletType: 0
 --- !u!64 &1664465286
 MeshCollider:
   m_ObjectHideFlags: 0
