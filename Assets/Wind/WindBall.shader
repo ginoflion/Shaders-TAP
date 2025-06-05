@@ -61,7 +61,7 @@ Shader "Unlit/WindBall"
                     float angle = atan2(uv.y, uv.x);
                     
                     
-                    float spiral = sin(angle * 4.0 + dist * 15.0 - _Time.y * _Speed * 3.0) * 0.5 + 0.5;
+                    float spiral = sin(angle * 4.0 + dist * 15.0 + _Time.y * _Speed * 3.0) * 0.5 + 0.5;
                     float fade = 1.0 - smoothstep(0.3, 0.5, dist);
                     
                     return fixed4(_CoreColor.rgb, spiral * fade * 0.5);
@@ -112,7 +112,7 @@ Shader "Unlit/WindBall"
                     float angle = atan2(uv.y, uv.x);
                     
                     
-                    float spiral = sin(angle * 4.0 + dist * 15.0 - _Time.y * _Speed * 3.0) * 0.5 + 0.5;
+                    float spiral = sin(angle * 4.0 + dist * 15.0 + _Time.y * _Speed * 3.0) * 0.5 + 0.5;
                     float fade = 1.0 - smoothstep(0.3, 0.5, dist);
                     
                     return fixed4(_OuterColor.rgb, spiral * fade * 0.5);

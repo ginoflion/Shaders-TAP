@@ -26,14 +26,14 @@ public class gun_projectWater : MonoBehaviour
 
     public float speed = 200;
 
-    public Renderer targetWallRenderer; // Assign your wall's Renderer component in the Inspector
-    private Material _wallInstanceMaterial; // To store the instance
+    public Renderer targetWallRenderer; 
+    private Material _wallInstanceMaterial;
 
     void Start()
     {
         if (targetWallRenderer != null)
         {
-            _wallInstanceMaterial = targetWallRenderer.material; // Get the instance at the start
+            _wallInstanceMaterial = targetWallRenderer.material; 
         }
         else
         {
@@ -43,8 +43,7 @@ public class gun_projectWater : MonoBehaviour
 
     void Update()
     {
-        if (_wallInstanceMaterial == null) return; // Don't do anything if no material
-
+        if (_wallInstanceMaterial == null) return; 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             sphereMaterial = fireSphereMaterial;
