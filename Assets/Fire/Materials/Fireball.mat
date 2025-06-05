@@ -24,42 +24,42 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: a7e62bedfd39bfa4785ec474d1878df5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9f72c638069c5764f88d6fbcbdb6b7c3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 9f72c638069c5764f88d6fbcbdb6b7c3, type: 3}
+        m_Texture: {fileID: 2800000, guid: a7e62bedfd39bfa4785ec474d1878df5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EmissionNoiseInfluence: 0.829
-    - _EmissionStrength: 3.61
-    - _FresnelPower: 6.78
-    - _MagmaTexScale: 500
-    - _NoiseDistortion: 0.107
-    - _OverallSpeed: 3
-    - _Ripple3DAmplitude: 0.05
-    - _Ripple3DEmissionBoost: 5
-    - _Ripple3DFrequency: 5
-    - _RippleAmplitude: 0.0703
-    - _RippleEmissionBoost: 1.2
-    - _RippleFrequency: 20
-    - _RippleSpeed: 4.21
-    - _ScrollSpeedMainX: 42.98
-    - _ScrollSpeedMainY: 17.05
-    - _ScrollSpeedNoiseX: 0.1
-    - _ScrollSpeedNoiseY: -0.08
-    - _SurfaceActivityIntensity: 2
-    - _SurfaceFlameIntensity: 7.41
-    - _SurfaceFlameSmoothness: 0.38
-    - _SurfaceFlameThreshold: 0.15
+    - _EmissionNoiseInfluence: 0.6
+    - _EmissionStrength: 3
+    - _FresnelPower: 4
+    - _MagmaTexScale: 1.5
+    - _NoiseDistortion: 0.135
+    - _OverallSpeed: 1.5
+    - _Ripple3DAmplitude: 0.2
+    - _Ripple3DEmissionBoost: 0
+    - _Ripple3DFrequency: 10
+    - _RippleAmplitude: 0.015
+    - _RippleEmissionBoost: 1.5
+    - _RippleFrequency: 15
+    - _RippleSpeed: 2
+    - _ScrollSpeedMainX: 0.03
+    - _ScrollSpeedMainY: 0.02
+    - _ScrollSpeedNoiseX: 0.07
+    - _ScrollSpeedNoiseY: -0.05
+    - _SurfaceActivityIntensity: 6.74
+    - _SurfaceFlameIntensity: 2.5
+    - _SurfaceFlameSmoothness: 0.5
+    - _SurfaceFlameThreshold: 0.371
     m_Colors:
-    - _Color: {r: 0.8584906, g: 0.20361635, b: 0, a: 1}
-    - _EmissionColor: {r: 0.43529412, g: 0.15581201, b: 0, a: 1}
-    - _FresnelColor: {r: 0.49019608, g: 0.2391426, b: 0, a: 1}
-    - _Ripple3DWaveColor: {r: 0.7830189, g: 0.3514849, b: 0.15881987, a: 1}
-    - _RippleWaveColor: {r: 1, g: 0.5902807, b: 0.19999999, a: 1}
-    - _SurfaceActivityColor: {r: 1, g: 0.6, b: 0, a: 1}
-    - _SurfaceFlameColor: {r: 0.29411766, g: 0.04545391, b: 0, a: 1}
+    - _Color: {r: 0.9433962, g: 0.8990343, b: 0.6719473, a: 1}
+    - _EmissionColor: {r: 0.2924528, g: 0, b: 0, a: 1}
+    - _FresnelColor: {r: 0.8490566, g: 0.0040049935, b: 0.120147854, a: 1}
+    - _Ripple3DWaveColor: {r: 0.6415094, g: 0.22093178, b: 0, a: 1}
+    - _RippleWaveColor: {r: 1, g: 0.8, b: 0.19999996, a: 1}
+    - _SurfaceActivityColor: {r: 1, g: 0.66981137, b: 0.1745283, a: 1}
+    - _SurfaceFlameColor: {r: 1, g: 0.6, b: 0, a: 1}
   m_BuildTextureStacks: []
