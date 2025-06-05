@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Contact : MonoBehaviour
 {
-    public Vector4[] pontosEmbateFire = new Vector4[512];
-    public Vector4[] pontosEmbateWind = new Vector4[512];
-    public Vector4[] pontosEmbateWater = new Vector4[512];
-    public Vector4[] pontosEmbateEarth = new Vector4[512];
+    public Vector4[] pontosEmbateFire = new Vector4[1024];
+    public Vector4[] pontosEmbateWind = new Vector4[1024];
+    public Vector4[] pontosEmbateWater = new Vector4[1024];
+    public Vector4[] pontosEmbateEarth = new Vector4[1024];
     int contadorFire = 0;
     int contadorWind = 0;
     int contadorWater = 0;
