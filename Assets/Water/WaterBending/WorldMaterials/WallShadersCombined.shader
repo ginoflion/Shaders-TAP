@@ -3,23 +3,32 @@ Shader "Unlit/WallShadersCombined"
     Properties
     {
         _MainTex ("Main Texture", 2D) = "white" {}
-        _PollutionTex ("Pollution Texture (for Type 1)", 2D) = "white" {}
-        _NoiseTex ("Distortion Noise (for Type 1)", 2D) = "white" {}
-        _ImpactTex ("Impact Texture (for Type 0)", 2D) = "white" {}
+        _PollutionTex ("Pollution Texture", 2D) = "white" {}
+        _NoiseTex ("Distortion Noise", 2D) = "white" {}
+        _ImpactTex ("Impact Texture", 2D) = "white" {}
 
-        _Distortion ("Distortion Strength (Type 1)", Range(0, 1)) = 0.1
-        _Radius ("Effect Radius", Range(0, 15)) = 0.2
-        _EdgeSoftness ("Edge Softness (Type 0)", Range(0.01, 1)) = 0.1
-        _MainColor ("Main Pollution Color (Type 1)", Color) = (0.2, 0.4, 0.3, 1)
-        _ReflectionStrength ("Reflection Strength (Type 1)", Range(0, 1)) = 0.3
-        _ImpactPushStrength ("Impact Push Strength (Type 0)", Float) = 0.1 // NOVO
-        _TwistAmount ("Twist Amount (Type 2 - Wind)", Float) = 1.5
-        _BulletType  ("Bullet Type", Float) = 0.0 // 0:ImpactEmissive+Dent, 1:Water/Pollution, 2:Wind
+        _Distortion ("Distortion Strength", Range(0, 1)) = 0.1
+        _RadiusWater ("Water Effect Radius", Range(0, 15)) = 0.2
+        _WaterColor ("Main Pollution Color", Color) = (0.2, 0.4, 0.3, 1)
+        _ReflectionStrength ("Reflection Strength", Range(0, 1)) = 0.3
 
-        _ImpactEmissionColor ("Impact Emission Color (Type 0)", Color) = (1, 0.5, 0, 1)
-        _MaxEmissionStrength ("Max Emission Strength (Type 0)", Range(0, 10)) = 2.0
-        _EmissionDecayTime ("Emission Decay Time (seconds) (Type 0)", Float) = 1.5
-        _MinPersistentEmission ("Min Persistent Emission (Type 0)", Range(0, 5)) = 0.2 // NOVO
+        _RadiusFire ("Effect Radius Fire", Range(0, 15)) = 0.2
+        _EdgeSoftness ("Edge Softness", Range(0.01, 1)) = 0.1
+        _ImpactFireStrenght ("Impact Fire Strength", Float) = 0.1 
+        _ImpactEmissionColor ("Impact Fire Emission Color", Color) = (1, 0.5, 0, 1)
+        _MaxEmissionStrength ("Max Emission Strength", Range(0, 10)) = 2.0
+        _EmissionDecayTime ("Emission Decay Time", Float) = 1.5
+        _MinPersistentEmission ("Min Persistent Emission", Range(0, 5)) = 0.2 
+
+        _ImpactWindStrenght ("Impact Wind Strength", Float) = 0.1   
+        _TwistAmount ("Twist Amount", Float) = 1.5
+        _RadiusWind ("Wind Effect Radius", Range(0, 15)) = 0.2
+
+        _EarthTex ("Earth Texture", 2D) = "white" {}
+        _RadiusEarth ("Earth Effect Radius", Range(0, 15)) = 0.2
+        _ImpactEarthStrenght ("Impact Earth Strength", Float) = 0.1
+
+        _BulletType  ("Bullet Type", Float) = 0.0 
     }
 
     SubShader
@@ -41,23 +50,33 @@ Shader "Unlit/WallShadersCombined"
             float4 _MainTex_ST;
 
             float _Distortion;
-            float _Radius;
-            float _EdgeSoftness;
-            float4 _MainColor;
-            float _ReflectionStrength;
-            float _ImpactPushStrength; // NOVO
-            float _TwistAmount;
-            float _BulletType;
+            float _RadiusWater;
 
+            float _RadiusFire;
+            float _EdgeSoftness;
+            float4 _WaterColor;
+            float _ReflectionStrength;
+            float _ImpactFireStrenght;
+            
             float4 _ImpactEmissionColor;
             float _MaxEmissionStrength;
             float _EmissionDecayTime;
-            float _MinPersistentEmission; // NOVO
+            float _MinPersistentEmission;
 
-            float4 _PontoEmbateFireArray[1024];  // Type 0: xyz=pos, w=impactTime
-            float4 _PontoEmbateWaterArray[1024]; // Type 1: xyz=pos, w=intensity
-            float4 _PontoEmbateWindArray[1024];  // Type 2: xyz=pos, w=intensity
+            float _ImpactWindStrenght;
+            float _TwistAmount;
+            float _RadiusWind;
+
+            sampler2D _EarthTex;
+            float _RadiusEarth;
+            float _ImpactEarthStrenght;
+
+            float4 _PontoEmbateFireArray[512]; 
+            float4 _PontoEmbateWaterArray[512]; 
+            float4 _PontoEmbateWindArray[512];
             float4 _PontoEmbateEarthArray[512]; 
+
+            float _BulletType;
 
             struct appdata
             {
@@ -71,7 +90,7 @@ Shader "Unlit/WallShadersCombined"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float3 worldPos : TEXCOORD1;
-                float3 worldNormal : TEXCOORD2; // Normal original, não deformada
+                float3 worldNormal : TEXCOORD2; 
                 float3 viewDir : TEXCOORD3;
             };
 
@@ -80,71 +99,56 @@ Shader "Unlit/WallShadersCombined"
                 v2f o;
                 float4 worldVertex = mul(unity_ObjectToWorld, v.vertex);
                 float3 worldNormalInput = UnityObjectToWorldNormal(v.normal);
-                float3 modifiedWorldPos = worldVertex.xyz; // Começa com a posição original
+                float3 modifiedWorldPos = worldVertex.xyz; 
 
-                // Efeito de Amassado/Dent (BulletType == 0.0)
                 if (_BulletType == 0.0)
                 {
-                    for (int i = 0; i < 1024; i++)
+                    for (int i = 0; i < 512; i++)
                     {
                         float4 ponto = _PontoEmbateFireArray[i];
-                        if (ponto.w > 0.001) // Se o impacto está ativo (tempo de impacto válido)
+                        if (ponto.w > 0.001)
                         {
                             float impactTime = ponto.w;
                             float age = _Time.y - impactTime;
 
-                            // O amassado deve persistir enquanto o efeito de glow estiver ativo,
-                            // ou talvez por um tempo um pouco maior.
-                            // Por simplicidade, vamos fazê-lo persistir enquanto age < _EmissionDecayTime * 1.5 (um pouco mais que o glow forte)
-                            // Ou, para que o amassado seja tão persistente quanto o brilho mínimo,
-                            // ele só desaparece quando o ponto é sobrescrito no array.
-                            // A condição ponto.w > 0.001 já garante isso.
-
                             float3 delta = modifiedWorldPos - ponto.xyz;
                             float dist = length(delta);
 
-                            if (dist <= _Radius)
+                            if (dist <= _RadiusFire)
                             {
-                                float t = saturate(1.0 - dist / _Radius);
-                                t = t * t; // Para um falloff mais acentuado (quadrático)
-
-                                // Empurra o vértice para dentro ao longo da sua normal original
-                                // O ponto.w (tempo) não é usado para a força aqui, apenas para saber se está ativo.
-                                modifiedWorldPos -= worldNormalInput * _ImpactPushStrength * t;
+                                float t = saturate(1.0 - dist / _RadiusFire);
+                                t = t * t;
+                                modifiedWorldPos -= worldNormalInput * _ImpactFireStrenght * t;
                             }
                         }
                     }
                 }
-                // Efeito de Vento (BulletType == 2.0)
                 else if (_BulletType == 2.0)
                 {
-                    for (int i = 0; i < 1024; i++)
+                    for (int i = 0; i < 512; i++)
                     {
                         float4 ponto = _PontoEmbateWindArray[i];
-                        if (ponto.w > 0.0) // ponto.w é a intensidade
+                        if (ponto.w > 0.0) 
                         {
                             float3 delta = modifiedWorldPos - ponto.xyz;
                             float dist = length(delta);
 
-                            if (dist <= _Radius)
+                            if (dist <= _RadiusWind)
                             {
-                                float t = saturate(1.0 - dist / _Radius);
+                                float t = saturate(1.0 - dist / _RadiusWind);
                                 t *= t;
 
-                                // Empurrão ao longo da normal
-                                modifiedWorldPos -= worldNormalInput * _ImpactPushStrength * t * ponto.w; // renomeei _Impact para _ImpactPushStrength antes, mas wind usava _Impact. Usando _ImpactPushStrength aqui também.
-                                                                                                // Se quiser um valor diferente para wind, crie _WindPushStrength
+                                modifiedWorldPos -= worldNormalInput * _ImpactWindStrenght * t;
 
-                                // Torção
                                 float3 localDelta = delta;
-                                float angle = _TwistAmount * t * ponto.w;
+                                float angle = _TwistAmount * t;
                                 float sinA = sin(angle);
                                 float cosA = cos(angle);
 
                                 float rotatedX = localDelta.x * cosA - localDelta.z * sinA;
                                 float rotatedZ = localDelta.x * sinA + localDelta.z * cosA;
 
-                                float3 twistedOffset = float3(rotatedX, localDelta.y, rotatedZ) - localDelta;
+                                float3 twistedOffset = float3(rotatedX, 0, rotatedZ) - float3(localDelta.x, 0, localDelta.z);
                                 modifiedWorldPos += twistedOffset;
                             }
                         }
@@ -154,40 +158,30 @@ Shader "Unlit/WallShadersCombined"
                     for (int i = 0; i < 512; i++)
                     {
                         float4 ponto = _PontoEmbateEarthArray[i];
-                        if (ponto.w > 0.001) // Se o impacto está ativo (tempo de impacto válido)
+                        if (ponto.w > 0.001) 
                         {
                             float impactTime = ponto.w;
                             float age = _Time.y - impactTime;
 
-                            // O amassado deve persistir enquanto o efeito de glow estiver ativo,
-                            // ou talvez por um tempo um pouco maior.
-                            // Por simplicidade, vamos fazê-lo persistir enquanto age < _EmissionDecayTime * 1.5 (um pouco mais que o glow forte)
-                            // Ou, para que o amassado seja tão persistente quanto o brilho mínimo,
-                            // ele só desaparece quando o ponto é sobrescrito no array.
-                            // A condição ponto.w > 0.001 já garante isso.
-
                             float3 delta = modifiedWorldPos - ponto.xyz;
                             float dist = length(delta);
 
-                            if (dist <= _Radius)
+                            if (dist <= _RadiusEarth)
                             {
-                                float t = saturate(1.0 - dist / _Radius);
-                                t = t * t; // Para um falloff mais acentuado (quadrático)
+                                float t = saturate(1.0 - dist / _RadiusEarth);
+                                t = t * t; 
 
-                                // Empurra o vértice para dentro ao longo da sua normal original
-                                // O ponto.w (tempo) não é usado para a força aqui, apenas para saber se está ativo.
-                                modifiedWorldPos += worldNormalInput * _ImpactPushStrength * t;
+                                modifiedWorldPos += worldNormalInput * _ImpactEarthStrenght * t;
                             }
                         }
                     }
                 }
-                
-                worldVertex.xyz = modifiedWorldPos; // Aplica a modificação final
+                worldVertex.xyz = modifiedWorldPos; 
 
                 o.vertex = UnityWorldToClipPos(worldVertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.worldPos = worldVertex.xyz; // Posição mundial potencialmente modificada
-                o.worldNormal = worldNormalInput; // Passar a normal original para o fragment shader
+                o.worldPos = worldVertex.xyz; 
+                o.worldNormal = worldNormalInput; 
                 o.viewDir = normalize(UnityWorldSpaceViewDir(worldVertex.xyz));
                 return o;
             }
@@ -196,11 +190,9 @@ Shader "Unlit/WallShadersCombined"
             {
                 fixed4 baseColor = tex2D(_MainTex, i.uv);
                 float3 accumulatedEmission = float3(0,0,0);
-
-                // Efeito de Impacto Emissivo + Textura Persistente (BulletType == 0.0)
                 if (_BulletType == 0.0)
                 {
-                    for (int k = 0; k < 1024; k++)
+                    for (int k = 0; k < 512; k++)
                     {
                         float4 ponto = _PontoEmbateFireArray[k];
                         if (ponto.w > 0.001) 
@@ -209,25 +201,20 @@ Shader "Unlit/WallShadersCombined"
                             float age = _Time.y - impactTime; 
                             float currentEmissionStrength = 0;
 
-                            if (age >= 0) // Impacto aconteceu ou está acontecendo
+                            if (age >= 0) 
                             {
                                 if (age < _EmissionDecayTime)
                                 {
-                                    // Interpola do máximo para o mínimo durante o tempo de decaimento
                                     float normalizedAge = age / _EmissionDecayTime;
                                     currentEmissionStrength = lerp(_MaxEmissionStrength, _MinPersistentEmission, normalizedAge);
                                 }
                                 else
                                 {
-                                    // Após o tempo de decaimento, mantém o brilho mínimo
                                     currentEmissionStrength = _MinPersistentEmission;
                                 }
 
-                                // O impacto só deixa de ser renderizado quando seu slot no array é sobrescrito
-                                // por um novo impacto (devido ao buffer circular no C#).
-
                                 float distToImpact = length(i.worldPos - ponto.xyz);
-                                float impactMask = 1.0 - smoothstep(_Radius - _EdgeSoftness, _Radius, distToImpact);
+                                float impactMask = 1.0 - smoothstep(_RadiusFire - _EdgeSoftness, _RadiusFire, distToImpact);
 
                                 if (impactMask > 0.0 && currentEmissionStrength > 0.0)
                                 {
@@ -237,24 +224,17 @@ Shader "Unlit/WallShadersCombined"
                             }
                         }
                     }
-                    // A cor base NÃO é modificada aqui, apenas a emissão é adicionada.
-                    // Se você quiser que a textura de impacto substitua a _MainTex na área afetada:
-                    // float totalImpactMaskForAlbedo = 0;
-                    // (calcular totalImpactMaskForAlbedo de forma similar a accumulatedEmission, mas sem strength, só a máscara)
-                    // baseColor.rgb = lerp(baseColor.rgb, tex2D(_ImpactTex, i.uv).rgb * _ImpactEmissionColor.rgb, saturate(totalImpactMaskForAlbedo));
-                    // Mas para um "glow" em cima, adicionar à emissão é o correto.
                 }
-                // Efeito de Poluição/Água (BulletType == 1.0)
                 else if (_BulletType == 1.0)
                 {
                     float pollutionAmount = 0.0;
-                    for (int j = 0; j < 1024; j++)
+                    for (int j = 0; j < 512; j++)
                     {
                         float4 ponto = _PontoEmbateWaterArray[j];
                         if (ponto.w > 0.0) 
                         {
                             float3 delta = i.worldPos - ponto.xyz;
-                            float r = length(delta) / _Radius;
+                            float r = length(delta) / _RadiusWater;
                             float blob = exp(-r * r * 4.0); 
                             pollutionAmount += blob * ponto.w;
                         }
@@ -267,7 +247,7 @@ Shader "Unlit/WallShadersCombined"
                         float2 distortedUV = i.uv + (_Distortion * (noise - 0.5) * pollutionAmount);
 
                         fixed4 pollutionTex = tex2D(_PollutionTex, distortedUV);
-                        fixed4 pollutionColor = lerp(_MainColor, pollutionTex, 0.6);
+                        fixed4 pollutionColor = lerp(_WaterColor, pollutionTex, 0.6);
 
                         float fresnel = 1.0 - saturate(dot(i.worldNormal, i.viewDir));
                         fresnel *= fresnel;
@@ -278,12 +258,38 @@ Shader "Unlit/WallShadersCombined"
                         return baseColor; 
                     }
                 }
-                else if(_BulletType == 3.0)
+                else if (_BulletType == 3.0)
                 {
+                    float4 earthResult = float4(0, 0, 0, 0);
+                    float totalBlend = 0.0;
 
+                    for (int k = 0; k < 512; k++)
+                    {
+                        float4 ponto = _PontoEmbateEarthArray[k];
+                        if (ponto.w > 0.001) 
+                        {
+                            float distToImpact = length(i.worldPos - ponto.xyz);
+                            float impactMask = 1.0 - smoothstep(_RadiusEarth - _EdgeSoftness, _RadiusEarth, distToImpact);
+
+                            if (impactMask > 0.0)
+                            {
+                                float2 localUV = (i.worldPos.xz - ponto.xz) / (_RadiusEarth * 2) + 0.5;
+                                if (all(localUV >= 0.0) && all(localUV <= 1.0))
+                                {
+                                    fixed4 tex = tex2D(_EarthTex, localUV);
+                                    earthResult.rgb = lerp(earthResult.rgb, tex.rgb, impactMask);
+                                    totalBlend = max(totalBlend, impactMask);
+                                }
+                            }
+                        }
+                    }
+
+                    if (totalBlend > 0.0)
+                    {
+                        return lerp(baseColor, earthResult, totalBlend);
+                    }
                 }
-                
-                baseColor.rgb += accumulatedEmission; // Adiciona a emissão acumulada (do tipo 0, se houver)
+                baseColor.rgb += accumulatedEmission;
                 return baseColor;
             }
             ENDCG

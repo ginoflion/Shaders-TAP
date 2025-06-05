@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _WaterTex:
-        m_Texture: {fileID: 2800000, guid: 9551cfb68ecbdb844822f57d14386d44, type: 3}
+        m_Texture: {fileID: 2800000, guid: 59416bedfcbeabd43b5c6c91580278f2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _WindTex:
@@ -45,7 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BulletType: 3
+    - _BulletType: 2
     - _EarthDentDepth: -0.797
     - _EarthDentFalloff: 0.668
     - _EarthEffectTransition: 2
@@ -60,16 +60,16 @@ Material:
     - _MagmaTex_UVScale: 1
     - _MagmaTrailWidth: 2
     - _WaterDentDepth: 0.1
-    - _WaterDentFalloff: 1.445
+    - _WaterDentFalloff: 0.644
     - _WaterEffectTransition: 0.5
-    - _WaterEmission: 1
+    - _WaterEmission: 1.19
     - _WaterTex_UVScale: 1
-    - _WaterTrailWidth: 0.731
-    - _WindDentDepth: 0.1
+    - _WaterTrailWidth: 1.14
+    - _WindDentDepth: 0.567
     - _WindDentFalloff: 1
     - _WindEffectTransition: 0.5
     - _WindEmission: 1
     - _WindTex_UVScale: 1
-    - _WindTrailWidth: 0.936
+    - _WindTrailWidth: 1.44
     m_Colors: []
   m_BuildTextureStacks: []

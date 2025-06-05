@@ -48,7 +48,10 @@ Shader "Hidden/Wind"
                 fixed4 col = tex2D(_MainTex, i.uv);
                 _FogColor  = float4(0.8, 0.8, 0.85, 1);
                 float time = _Time.y * _FogSpeed;
-                float fog = noise(i.uv + time) * 0.5 + 0.3;
+                float rawNoise = noise(i.uv + time);
+                float minFog = 0.2;
+                float maxFog = 0.7;
+                float fog = lerp(minFog, maxFog, rawNoise);
                 
                 col.rgb = lerp(col.rgb, _FogColor.rgb, fog * _FogIntensity);
                 
