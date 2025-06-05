@@ -76,6 +76,10 @@ public class gun_projectWater : MonoBehaviour
             projectile = earthProjectile;
             bulletType = BulletType.Earth;
         }
+        else if (Input.GetKey(KeyCode.Alpha5))
+        {
+            bulletType = BulletType.None;
+        }
 
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
