@@ -64,10 +64,8 @@ Shader "Custom/PedraRotativa"
             {
                 v2f o;
                 
-                // Calcular rotação do objeto baseada no tempo
                 float tempo = _Time.y * _VelocidadeRotacao;
                 
-                // Matriz de rotação em Y (roda como um pião)
                 float cosY = cos(tempo);
                 float sinY = sin(tempo);
                 float3x3 rotacaoY = float3x3(
@@ -76,7 +74,6 @@ Shader "Custom/PedraRotativa"
                     -sinY, 0, cosY
                 );
                 
-                // Rotação adicional em X para movimento mais interessante
                 float cosX = cos(tempo * 0.3);
                 float sinX = sin(tempo * 0.3);
                 float3x3 rotacaoX = float3x3(
@@ -85,19 +82,16 @@ Shader "Custom/PedraRotativa"
                     0, sinX, cosX
                 );
                 
-                // Combinar rotações
                 float3x3 rotacaoFinal = mul(rotacaoY, rotacaoX);
                 
-                // Aplicar rotação ao vértice
                 float3 verticeRotacionado = mul(rotacaoFinal, v.vertex.xyz);
                 float3 normalRotacionada = mul(rotacaoFinal, v.normal);
                 
-                // Deformar com ruído (usando posição ORIGINAL, não rotacionada)
                 float noiseValue = noise3D(v.vertex.xyz * _EscalaRuido);
                 verticeRotacionado += normalRotacionada * noiseValue * _Deformacao;
                 
                 o.vertex = UnityObjectToClipPos(float4(verticeRotacionado, 1.0));
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex); // UV normal, sem rotação extra
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldNormal = UnityObjectToWorldNormal(normalRotacionada);
                 
                 return o;

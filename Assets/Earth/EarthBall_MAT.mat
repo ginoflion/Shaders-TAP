@@ -30,7 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _DeformAmount: 0.169
-    - _Deformacao: -0.089
+    - _Deformacao: -0.112
     - _EscalaRuido: 10
     - _FragmentAmount: 0.307
     - _FragmentDistance: 0.5
