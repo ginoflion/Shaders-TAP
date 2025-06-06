@@ -23,6 +23,12 @@ Shader "Unlit/WindBall"
                 #pragma vertex vert
                 #pragma fragment frag
                 #include "UnityCG.cginc"
+
+                struct appdata
+                {
+                    float4 vertex : POSITION;
+                    float2 uv : TEXCOORD0;
+                };
                 
                 struct v2f
                 {
@@ -33,10 +39,10 @@ Shader "Unlit/WindBall"
                 fixed4 _CoreColor;
                 float _Speed;
                 
-                v2f vert (float4 vertex : POSITION, float2 uv : TEXCOORD0)
+                v2f vert (appdata v)
                 {
                     v2f o;
-                    float3 pos = vertex.xyz*0.4;
+                    float3 pos = v.vertex.xyz*0.4;
                     
                     
                     float angle = -_Time.y * _Speed + pos.y * 6.0;
@@ -50,7 +56,7 @@ Shader "Unlit/WindBall"
 
 
                     o.vertex = UnityObjectToClipPos(pos);
-                    o.uv = uv;
+                    o.uv = v.uv;
                     return o;
                 }
                 
@@ -80,6 +86,12 @@ Shader "Unlit/WindBall"
                 #pragma vertex vert
                 #pragma fragment frag
                 #include "UnityCG.cginc"
+
+                struct appdata
+                {
+                    float4 vertex : POSITION;
+                    float2 uv : TEXCOORD0;
+                };
                 
                 struct v2f
                 {
@@ -90,10 +102,10 @@ Shader "Unlit/WindBall"
                 fixed4 _OuterColor;
                 float _Speed;
                 
-                v2f vert (float4 vertex : POSITION, float2 uv : TEXCOORD0)
+                v2f vert (appdata v)
                 {
                     v2f o;
-                    float3 pos = vertex.xyz;
+                    float3 pos = v.vertex.xyz;
                     
                     
                     float angle = _Time.y * _Speed + pos.y * 6.0;
@@ -101,7 +113,7 @@ Shader "Unlit/WindBall"
                     pos.xz = float2(pos.x * c - pos.z * s, pos.x * s + pos.z * c);
                     
                     o.vertex = UnityObjectToClipPos(pos);
-                    o.uv = uv;
+                    o.uv = v.uv;
                     return o;
                 }
                 
