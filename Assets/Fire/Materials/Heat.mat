@@ -38,8 +38,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _DistortionAmount: 0.03
-    - _DistortionMaskPower: 2
-    - _DistortionScale: 5
+    - _DistortionMaskPower: 0.1
+    - _DistortionScale: 4.9
     - _DistortionSpeedX: 0.5
     - _DistortionSpeedY: 0.5
     - _DistortionStrength: 0.01

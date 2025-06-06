@@ -33,7 +33,6 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
         _Ripple3DCenterOS ("3D Ripple Center (Object Space)", Vector) = (0,0,0,0)
         _Ripple3DFrequency ("3D Ripple Frequency", Float) = 5.0
         _Ripple3DAmplitude ("3D Ripple Amplitude (Vertex Disp.)", Float) = 0.05
-        // _Ripple3DEmissionBoost is removed
         _Ripple3DWaveColor("3D Ripple Wave Color", Color) = (1,0.9,0.5,1)
     }
 
@@ -58,9 +57,9 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
             float wave3D_fromVert : TEXCOORD1; 
         };
 
-        // Uniforms
+        
         half4 _Color;
-        // Removed individual scroll speeds and scales, added global ones
+     
         float _OverallSpeed;
         float _TextureScale;
         half _NoiseDistortion;
@@ -72,42 +71,39 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
         half _FresnelPower;
 
         half4 _SurfaceFlameColor;
-        half _SurfaceFlameIntensity; // Kept individual intensity
-        // Removed _SurfaceFlameScrollSpeedY, _SurfaceFlameScale
+        half _SurfaceFlameIntensity; 
+       
         half _SurfaceFlameThreshold, _SurfaceFlameSmoothness;
 
         float4 _Ripple3DCenterOS; 
         float _Ripple3DFrequency;
-        // Removed _Ripple3DSpeed
+        
         float _Ripple3DAmplitude; 
         half4 _Ripple3DWaveColor;
-        // End Uniforms
+      
 
-        // --- Hardcoded Factors for deriving speeds/scales from global controls ---
+  
         static const float MAIN_TEX_SCROLL_X_FACTOR = 0.03;
         static const float MAIN_TEX_SCROLL_Y_FACTOR = 0.02;
         static const float NOISE_TEX_SCROLL_X_FACTOR = 0.07;
         static const float NOISE_TEX_SCROLL_Y_FACTOR = -0.05;
-        static const float NOISE_TEX_SCALE_MULTIPLIER = 1.0; // Noise scale relative to _TextureScale
+        static const float NOISE_TEX_SCALE_MULTIPLIER = 1.0; 
         
         static const float SURFACE_FLAME_SCROLL_Y_FACTOR = 0.3;
-        static const float SURFACE_FLAME_SCALE_MULTIPLIER = 1.2; // Flames slightly larger scale than base
+        static const float SURFACE_FLAME_SCALE_MULTIPLIER = 1.2;
 
         static const float RIPPLE_3D_SPEED_FACTOR = 1.0;
         static const float PULSE_EMISSION_STRENGTH_FACTOR = 0.08; 
 
 
-        // Helper for sine wave
         half CalculateWave(float dist, float frequency, float speed, float timeParam) 
         {
             return sin(dist * frequency - timeParam * speed);
         }
-        // Helper for remapping wave from [-1,1] to [0,1]
         half RemapWaveTo01(half waveValue_neg1_pos1)
         {
             return saturate(waveValue_neg1_pos1 * 0.5h + 0.5h);
         }
-        // Helper for scrolling UVs based on global speed
         float2 ScrollUV(float2 uv, float scrollX_factor, float scrollY_factor, float globalSpeed, float timeParam)
         {
             float GSpeed = globalSpeed * timeParam;
@@ -117,7 +113,6 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
         }
 
 
-        // Vertex Modifier Function
         void vert (inout appdata_full v, out Input o)
         {
             UNITY_INITIALIZE_OUTPUT(Input, o);
@@ -126,7 +121,6 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
             float3 rippleCenterOS_val = _Ripple3DCenterOS.xyz; 
             
             float distFrom3DCenter = length(objectPos - rippleCenterOS_val);
-            // 3D Ripple speed now uses _OverallSpeed
             float currentRippleSpeed = RIPPLE_3D_SPEED_FACTOR * _OverallSpeed;
             half wave3DValue = CalculateWave(distFrom3DCenter, _Ripple3DFrequency, currentRippleSpeed, _Time.y);
             
@@ -139,18 +133,16 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            // Base UVs (NO UV RIPPLE HERE)
+            
             float2 base_uv = IN.uv_MainTex;
 
             // --- 1. Núcleo de Magma ---
-            // Noise texture UVs: uses _TextureScale and _OverallSpeed
             float2 scrolledNoiseUV = ScrollUV(base_uv * (_TextureScale * NOISE_TEX_SCALE_MULTIPLIER), 
                                               NOISE_TEX_SCROLL_X_FACTOR, 
                                               NOISE_TEX_SCROLL_Y_FACTOR, 
                                               _OverallSpeed, _Time.y);
             half noiseVal = tex2D(_NoiseTex, scrolledNoiseUV).r;
 
-            // Main texture UVs: uses _TextureScale and _OverallSpeed
             float2 mainTexScaledUV = base_uv * _TextureScale;
             float2 mainTexScrolledUV = ScrollUV(mainTexScaledUV, 
                                                 MAIN_TEX_SCROLL_X_FACTOR, 
@@ -161,7 +153,6 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
             half4 mainTexCol = tex2D(_MainTex, distortedMainUV); 
             half3 albedo = mainTexCol.rgb * _Color.rgb; 
 
-            // --- Summing Emissions ---
             half3 totalEmission = (half3)0;
 
             // --- 2. Emissão do Núcleo ---
@@ -176,10 +167,9 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
             totalEmission += _FresnelColor.rgb * fresnel * _EmissionStrength;
 
             // --- 4. Chamas na Superfície ---
-            // Surface flame UVs: uses _TextureScale and _OverallSpeed
             float2 surfaceFlameScaledUV = base_uv * (_TextureScale * SURFACE_FLAME_SCALE_MULTIPLIER);
             float2 surfaceFlameUV = ScrollUV(surfaceFlameScaledUV, 
-                                             0.0h, // No X scroll for flames usually
+                                             0.0h,
                                              SURFACE_FLAME_SCROLL_Y_FACTOR, 
                                              _OverallSpeed, _Time.y);
             half surfaceFlameNoiseVal = tex2D(_SurfaceFlameTex, surfaceFlameUV).r;
@@ -195,7 +185,6 @@ Shader "Custom/SolidMagmaBall_OverallAnimSpeedScale_NoPulseBoost"
             totalEmission += pulseBaseEmission * _EmissionStrength * PULSE_EMISSION_STRENGTH_FACTOR;
 
 
-            // --- Combinar Tudo ---
             o.Albedo = albedo;
             o.Emission = totalEmission; 
             o.Metallic = 0.0h;    
